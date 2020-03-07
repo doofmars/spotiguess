@@ -1,4 +1,4 @@
 <img width="{{track.album.images.[0].width}}" height="{{track.album.images.[0].height}}" src="{{track.album.images.[0].url}}"></img>
 <h2 class="white"><b class="cyan">{{track.name}}</b> <br><small>by</small> <b class="olive">{{#each track.artists}}{{name}}{{#if @last}}{{else}}, {{/if}}{{/each}}</b></h2>
 <h2 class="white"><small>released on</small> <b class="magenta">{{track.album.name}}</b></h2>
-
+<audio id="audioPreviewUrl" src="{{track.preview_url}}" alt="" preload="auto"></audio>

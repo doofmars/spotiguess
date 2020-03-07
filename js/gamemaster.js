@@ -108,6 +108,9 @@
            var item = response.items[Math.floor(Math.random() * response.items.length)];
            console.log('selected: ' + item.track.name);
            $('#song').html(songTempalate(item));
+           $('#audioPreviewUrl').on("canplay", function() {
+             $('#audioPreviewUrl')[0].play();
+           });
            $('#play').show();
          },
          error: function(response) {
