@@ -1,20 +1,20 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').createServer(app);
 
+app.use('/js',
+        express.static(__dirname + '/js'));
+app.use('/css',
+        express.static(__dirname + '/css'));
+app.use('/templates',
+        express.static(__dirname + '/templates'));
+
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/css/style.css', function(req, res) {
-  res.sendFile(__dirname + "/css/" + "style.css");
-});
-
-app.get('/js/lib/jquery-3.4.1.min.js', function(req, res) {
-  res.sendFile(__dirname + "/js/lib/" + "jquery-3.4.1.min.js");
+  res.sendFile(__dirname + '/html/' + 'index.html');
 });
 
 app.get('/gamemaster.html', function(req, res) {
-  res.sendFile(__dirname + "/html/" + "gamemaster.html");
+  res.sendFile(__dirname + '/html/' + 'gamemaster.html');
 });
 
 http.listen(3000, function(){
