@@ -109,3 +109,10 @@ tmp/
 temp/
 
 # End of https://www.gitignore.io/api/node
+
+
+# Ignore handlebar files
+*.precompiled.js
+
+# Ignore samples
+sample*.json
