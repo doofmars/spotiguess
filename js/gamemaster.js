@@ -10,6 +10,7 @@
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
       q = window.location.hash.substring(1);
+    // Clear hash location from url to prevent access key leaking
     history.replaceState(null, null, ' ');
     while (e = r.exec(q)) {
       hashParams[e[1]] = decodeURIComponent(e[2]);
@@ -17,8 +18,8 @@
     return hashParams;
   }
 
-  userProfileTemplate = Handlebars.templates.playlists,
-    userProfilePlaceholder = document.getElementById('user-profile');
+  playlistsTempalate = Handlebars.templates.playlists,
+    playlistsPlaceholder = document.getElementById('playlists');
 
   var params = getHashParams();
 
@@ -28,7 +29,8 @@
 
 
   if (access_token && (state === null || state !== storedState)) {
-    alert('There was an error during the authentication');
+    $('#login').show();
+    $('#error').show();
   } else {
     localStorage.removeItem(stateKey);
     if (access_token) {
@@ -38,7 +40,7 @@
           'Authorization': 'Bearer ' + access_token
         },
         success: function(response) {
-          userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+          playlistsPlaceholder.innerHTML = playlistsTempalate(response);
           $('#login').hide();
           $('#loggedin').show();
         }

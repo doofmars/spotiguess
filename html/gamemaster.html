@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style type="text/css">
-      #login, #loggedin {
+      #login, #loggedin, #error {
         display: none;
       }
       .text-overflow {
@@ -24,12 +24,11 @@
         <h1>Gamemaster
           <small class="text-muted">Login to start a game</small>
         </h1>
+        <p class="text-danger" id="error">There was an error during the authentication</p>
         <button id="login-button" class="sbtn sbtn-green mb-1">Log in with Spotify</button>
       </div>
       <div id="loggedin">
-        <div id="user-profile">
-        </div>
-        <div id="oauth">
+        <div id="playlists">
         </div>
       </div>
     </div>
