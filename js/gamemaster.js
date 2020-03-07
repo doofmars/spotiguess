@@ -19,6 +19,22 @@
     return hashParams;
   }
 
+  /*
+   * Resets the game state
+   * @params {reason} why was the reset called
+   * @params {error} true if error message should be displayed
+   */
+  function reset(reason, error) {
+    console.log("Reset: " + reason);
+    $('#create').hide();
+    $('#login').show();
+    if (error) {
+      $('#error').show();
+    } else {
+      game = {pos:-1, id:"", phase:"create"};
+    }
+  }
+
   //Templates
   var playlistsTempalate = Handlebars.templates.playlists;
   //Login
@@ -37,16 +53,14 @@
       localStorage.setItem(accessTokenKey, access_token);
     } else {
       // Failed login
-      $('#login').show();
-      $('#error').show();
-      $('#loggedin').hide();
+      reset("Failed to login", true);
     }
   } else {
     access_token = localStorage.getItem(accessTokenKey);
   }
 
   //check if the access_token is not null
-  if (access_token) {
+  if (access_token && game.phase === "create") {
     $.ajax({
       url: 'https://api.spotify.com/v1/me/playlists',
       headers: {
@@ -61,16 +75,15 @@
           $('#playlists tr#' + game.pos).addClass('selected');
         });
         $('#login').hide();
-        $('#loggedin').show();
+        $('#error').hide();
+        $('#error-shuffle').hide();
+        $('#create').show();
       },
       error: function(response) {
-        $('#loggedin').hide();
-        $('#login').show();
-        $('#error').show();
+        reset("Invalid access token", true);
       }
     });
   } else {
-    $('#login').show();
-    $('#loggedin').hide();
+    reset("Missing access token", false);
   }
 })();
