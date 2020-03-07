@@ -37,6 +37,7 @@
 
   //Templates
   var playlistsTempalate = Handlebars.templates.playlists;
+  var songTempalate = Handlebars.templates.song;
   //Login
   var params = getHashParams();
   var state = params.state,
@@ -95,7 +96,24 @@
     } else if (game.phase !== "create") {
       $('#error-shuffle').show().html("Wrong game state");
     } else {
-
+       $('#error-shuffle').hide();
+       $('#create').hide();
+       game.phase = "play";
+       $.ajax({
+         url: 'https://api.spotify.com/v1/playlists/'+game.id+'/tracks',
+         headers: {
+           'Authorization': 'Bearer ' + access_token
+         },
+         success: function(response) {
+           var item = response.items[Math.floor(Math.random() * response.items.length)];
+           console.log('selected: ' + item.track.name);
+           $('#song').html(songTempalate(item));
+           $('#play').show();
+         },
+         error: function(response) {
+           reset("Invalid access token", true);
+         }
+       });
     }
   });
 })();
