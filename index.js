@@ -5,12 +5,16 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/style.css', function(req, res) {
-  res.sendFile(__dirname + "/" + "style.css");
+app.get('/css/style.css', function(req, res) {
+  res.sendFile(__dirname + "/css/" + "style.css");
 });
 
-app.get('/jquery-3.4.1.min.js', function(req, res) {
-  res.sendFile(__dirname + "/" + "jquery-3.4.1.min.js");
+app.get('/js/lib/jquery-3.4.1.min.js', function(req, res) {
+  res.sendFile(__dirname + "/js/lib/" + "jquery-3.4.1.min.js");
+});
+
+app.get('/gamemaster.html', function(req, res) {
+  res.sendFile(__dirname + "/html/" + "gamemaster.html");
 });
 
 http.listen(3000, function(){

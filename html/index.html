@@ -12,7 +12,7 @@
   <div class="content">
     <h1 class="cyan mb-3 block">Spotiguess</h1>
     <div class="gamestart">
-      <button class="sbtn sbtn-green mb-1 btn-block" type="button">
+      <button class="sbtn sbtn-green mb-1 btn-block" id="login" type="button">
         Create new game
       </button>
       <p class="text-white mb-4">
@@ -28,12 +28,12 @@
       <div class="join-info">
         <input type="text" class="form-control mb-1" placeholder="Name">
         <input type="text" class="form-control mb-1" placeholder="Roomkey">
-        <button class="sbtn sbtn-green mb-1 float-right" type="button">
+        <button class="sbtn sbtn-green mb-1 float-right" id="accept" type="button">
           Join
         </button>
       </div>
     </div>
-    <script src="jquery-3.4.1.min.js"></script>
+    <script src="js/lib/jquery-3.4.1.min.js"></script>
     <script>
       $(function() {
         console.log("loaded");
@@ -44,5 +44,6 @@
         });
       });
     </script>
+    <script src=""></script>
   </body>
 </html>
