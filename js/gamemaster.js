@@ -1,6 +1,7 @@
 (function() {
 
   var stateKey = 'spotify_auth_state';
+  var accessTokenKey = 'spoitify_access_token';
 
   /**
    * Obtains parameters from the hash of the URL
@@ -18,36 +19,51 @@
     return hashParams;
   }
 
-  playlistsTempalate = Handlebars.templates.playlists,
-    playlistsPlaceholder = document.getElementById('playlists');
+  var playlistsTempalate = Handlebars.templates.playlists;
+  var playlistsPlaceholder = document.getElementById('playlists');
 
   var params = getHashParams();
 
-  var access_token = params.access_token,
-    state = params.state,
+  var state = params.state,
     storedState = localStorage.getItem(stateKey);
+  var access_token = null;
 
-
-  if (access_token && (state === null || state !== storedState)) {
-    $('#login').show();
-    $('#error').show();
-  } else {
-    localStorage.removeItem(stateKey);
+  if (state === storedState) {
+    // new login, store access token.
+    access_token = params.access_token;
     if (access_token) {
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me/playlists',
-        headers: {
-          'Authorization': 'Bearer ' + access_token
-        },
-        success: function(response) {
-          playlistsPlaceholder.innerHTML = playlistsTempalate(response);
-          $('#login').hide();
-          $('#loggedin').show();
-        }
-      });
+      localStorage.removeItem(stateKey);
+      localStorage.setItem(accessTokenKey, access_token);
     } else {
+      // Failed login
       $('#login').show();
+      $('#error').show();
       $('#loggedin').hide();
     }
+  } else {
+    access_token = localStorage.getItem(accessTokenKey);
+  }
+
+  //check if the access_token is not null
+  if (access_token) {
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/playlists',
+      headers: {
+        'Authorization': 'Bearer ' + access_token
+      },
+      success: function(response) {
+        playlistsPlaceholder.innerHTML = playlistsTempalate(response);
+        $('#login').hide();
+        $('#loggedin').show();
+      },
+      error: function(response) {
+        $('#loggedin').hide();
+        $('#login').show();
+        $('#error').show();
+      }
+    });
+  } else {
+    $('#login').show();
+    $('#loggedin').hide();
   }
 })();
