@@ -35,7 +35,7 @@
     localStorage.removeItem(stateKey);
     if (access_token) {
       $.ajax({
-        url: 'https://api.spotify.com/v1/me',
+        url: 'https://api.spotify.com/v1/me/playlists',
         headers: {
           'Authorization': 'Bearer ' + access_token
         },
