@@ -86,4 +86,16 @@
   } else {
     reset("Missing access token", false);
   }
+
+  $('#shuffle').click(function(event) {
+    if (!access_token) {
+      reset("Missing access token", false);
+    } else if (game.pos === -1 || game.id === "") {
+      $('#error-shuffle').show().html("Please select a playlist");
+    } else if (game.phase !== "create") {
+      $('#error-shuffle').show().html("Wrong game state");
+    } else {
+
+    }
+  });
 })();

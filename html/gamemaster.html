@@ -27,9 +27,25 @@
         <p class="text-danger" id="error">There was an error during the authentication</p>
         <button id="login-button" class="sbtn sbtn-green mb-1">Log in with Spotify</button>
       </div>
-      <div id="loggedin">
-        <div id="playlists">
+      <div id="create">
+        <div id="playlists"></div>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+              <span class="text-danger align-middle" id="error-shuffle">Failed to start shuffle</span>
+            </div>
+            <div class="col-sm">
+              <button class="sbtn sbtn-green mb-1 float-right" id="shuffle">
+                Shuffle
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
+      <div id="play">
+        <div id="song"></div>
       </div>
     </div>
 
