@@ -1,4 +1,4 @@
-<h1 class="olive">Playlist</h1>
+<h1 class="cyan mb-3">Playlist</h1>
 
 <table class="table table-dark">
   <thead>
@@ -10,14 +10,18 @@
       <th scope="col"></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="playlists">
     {{#each items }}
     <tr id="{{@index}}">
       <th scope="row">{{@index}}</th>
       <td><image width="150" height="150" class="img-thumbnail" src="{{images.[0].url}}"></image></td>
       <td>{{name}}</td>
       <td>{{owner.display_name}}</td>
-      <td><button class="sbtn sbtn-green" id="select{{@index}}" type="button">Select</button></td>
+      <td>
+        <button class="sbtn sbtn-green" id="{{id}}" value="{{@index}}" type="button">
+          Select
+        </button>
+      </td>
     </tr>
     {{/each}}
   </tbody>

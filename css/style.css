@@ -58,6 +58,10 @@ h1 {
   color: #fff;
 }
 
+.selected {
+  background-color: #7E858C;
+}
+
 .content {
   width: 100%;
   max-width: 400px;

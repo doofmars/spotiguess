@@ -19,14 +19,15 @@
     return hashParams;
   }
 
+  //Templates
   var playlistsTempalate = Handlebars.templates.playlists;
-  var playlistsPlaceholder = document.getElementById('playlists');
-
+  //Login
   var params = getHashParams();
-
   var state = params.state,
     storedState = localStorage.getItem(stateKey);
   var access_token = null;
+  //Game state
+  var game = {pos:-1, id:"", phase:"create"};
 
   if (state === storedState) {
     // new login, store access token.
@@ -52,7 +53,13 @@
         'Authorization': 'Bearer ' + access_token
       },
       success: function(response) {
-        playlistsPlaceholder.innerHTML = playlistsTempalate(response);
+        $('#playlists').html(playlistsTempalate(response));
+        $('#playlists button').click(function(event) {
+          $('#playlists tr#' + game.pos).removeClass('selected');
+          game.pos = this.value;
+          game.id = this.id;
+          $('#playlists tr#' + game.pos).addClass('selected');
+        });
         $('#login').hide();
         $('#loggedin').show();
       },
