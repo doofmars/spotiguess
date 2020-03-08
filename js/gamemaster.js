@@ -35,6 +35,17 @@
     }
   }
 
+  function setNextSong() {
+    if (game.phase === "play" && items !== null) {
+      var item = items[Math.floor(Math.random() * items.length)];
+      console.log('selected: ' + item.track.name);
+      $('#song').html(songTempalate(item));
+      $('#audioPreviewUrl').on("canplay", function() {
+        $('#audioPreviewUrl')[0].play();
+      });
+    }
+  }
+
   //Templates
   var playlistsTempalate = Handlebars.templates.playlists;
   var songTempalate = Handlebars.templates.song;
@@ -45,6 +56,7 @@
   var access_token = null;
   //Game state
   var game = {pos:-1, id:"", phase:"create"};
+  var items = null;
 
   if (state === storedState) {
     // new login, store access token.
@@ -78,6 +90,7 @@
         $('#login').hide();
         $('#error').hide();
         $('#error-shuffle').hide();
+        $('#play').hide();
         $('#create').show();
       },
       error: function(response) {
@@ -97,6 +110,7 @@
       $('#error-shuffle').show().html("Wrong game state");
     } else {
        $('#error-shuffle').hide();
+       $('#login').hide();
        $('#create').hide();
        game.phase = "play";
        $.ajax({
@@ -105,12 +119,8 @@
            'Authorization': 'Bearer ' + access_token
          },
          success: function(response) {
-           var item = response.items[Math.floor(Math.random() * response.items.length)];
-           console.log('selected: ' + item.track.name);
-           $('#song').html(songTempalate(item));
-           $('#audioPreviewUrl').on("canplay", function() {
-             $('#audioPreviewUrl')[0].play();
-           });
+           items = response.items;
+           setNextSong();
            $('#play').show();
          },
          error: function(response) {
@@ -118,5 +128,10 @@
          }
        });
     }
+  });
+
+
+  $('#next').click(function(event) {
+    setNextSong();
   });
 })();
