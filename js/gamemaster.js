@@ -19,7 +19,21 @@
     return hashParams;
   }
 
-  /*
+  /**
+   * Generates a room code string containing only uppercase letters
+   * @return {string} The generated string
+   */
+  function generateRoomCode() {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    for (var i = 0; i < 5; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
+  /**
    * Resets the game state
    * @params {reason} why was the reset called
    * @params {error} true if error message should be displayed
@@ -35,6 +49,9 @@
     }
   }
 
+  /**
+   * Set the stage for the next song
+   */
   function setNextSong() {
     if (game.phase === "play" && items !== null) {
       var item = items[Math.floor(Math.random() * items.length)];
@@ -68,8 +85,10 @@
     storedState = localStorage.getItem(stateKey);
   var access_token = null;
   //Game state
-  var game = {pos:-1, id:"", phase:"create"};
+  var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode()};
   var items = null;
+
+  $('#room-code').text(game.roomcode);
 
   if (state === storedState) {
     // new login, store access token.
