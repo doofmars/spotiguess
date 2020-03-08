@@ -43,6 +43,19 @@
       $('#audioPreviewUrl').on("canplay", function() {
         $('#audioPreviewUrl')[0].play();
       });
+      var countdownNumberEl = $('#countdown-number');
+      var countdown = 30;
+      var interval = setInterval(function() {
+        countdown = --countdown;
+
+        if (countdown <= 0) {
+          $('#countdown').hide();
+          $('#added-by').show();
+          clearInterval(interval);
+        }
+
+        countdownNumberEl.text(countdown);
+      }, 1000);
     }
   }
 
