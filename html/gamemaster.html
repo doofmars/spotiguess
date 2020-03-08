@@ -7,17 +7,15 @@
     <link rel="stylesheet" href="css/lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style type="text/css">
-      #login, #loggedin, #error, #error-shuffle {
+      #login,
+      #loggedin,
+      #error,
+      #error-shuffle {
         display: none;
-      }
-      .text-overflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 750px;
       }
     </style>
   </head>
+
   <body class="text-center bg-black">
     <div class="container">
       <div id="login">
@@ -31,15 +29,13 @@
         <div id="playlists"></div>
         <div class="container">
           <div class="row">
-            <div class="col-sm">
+            <div class="col" id="players">
             </div>
-            <div class="col-sm">
-              <span class="text-danger align-middle" id="error-shuffle">Failed to start shuffle</span>
-            </div>
-            <div class="col-sm">
+            <div class="col col-lg-4">
               <button class="sbtn sbtn-green mb-1 float-right" id="shuffle">
                 Shuffle
               </button>
+              <span class="text-danger align-middle" id="error-shuffle">Failed to start shuffle</span>
             </div>
           </div>
         </div>

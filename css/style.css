@@ -16,6 +16,15 @@ h1 {
   font-size: 4rem;
 }
 
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+/* The buttons */
 .sbtn {
   font-size: 12px;
   line-height: 18px;
@@ -68,6 +77,15 @@ h1 {
   margin: auto;
 }
 
+.content-start {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  margin: auto;
+}
+
+
+/* The colors */
 .cyan {
   color: #cdf658;
 }
@@ -88,10 +106,7 @@ h1 {
   background-color: #000;
 }
 
-.join-info {
-  display: none;
-}
-
+/* The circular Countdown */
 #countdown {
   position: relative;
   margin: auto;
@@ -136,10 +151,3 @@ svg circle {
   }
 }
 
-.vertical-center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}

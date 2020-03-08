@@ -6,10 +6,15 @@
   <style type="text/css"></style>
   <link rel="stylesheet" href="css/lib/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <style type="text/css">
+  #join-info {
+    display: none;
+  }
+  </style>
 </head>
 
 <body class="text-center bg-black">
-  <div class="content">
+  <div class="content-start">
     <h1 class="cyan mb-3 block">Spotiguess</h1>
     <div class="gamestart">
       <button class="sbtn sbtn-green mb-1 btn-block" id="login-button" type="button">
@@ -25,7 +30,7 @@
       <p class="text-white">
         Join an active session
       </p>
-      <div class="join-info">
+      <div id="join-info">
         <input type="text" class="form-control mb-1" placeholder="Name">
         <input type="text" class="form-control mb-1" placeholder="Roomkey">
         <button class="sbtn sbtn-green mb-1 float-right" id="join-accept" type="button">
@@ -38,7 +43,7 @@
     <script>
       $(function() {
         $("#join-init").click(function() {
-          $(".join-info").slideDown( "slow", function() {
+          $("#join-info").slideDown( "slow", function() {
             //complete
           });
         });
