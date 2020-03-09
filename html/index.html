@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="css/lib/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
   <style type="text/css">
-  #join-info {
+  #join-info,
+  #play {
     display: none;
   }
   </style>
@@ -16,7 +17,7 @@
 <body class="text-center bg-black">
   <div class="content-start">
     <h1 class="cyan mb-3 block">Spotiguess</h1>
-    <div class="gamestart">
+    <div id="gamestart">
       <button class="sbtn sbtn-green mb-1 btn-block" id="login-button" type="button">
         Create new game
       </button>
@@ -31,23 +32,20 @@
         Join an active session
       </p>
       <div id="join-info">
-        <input type="text" class="form-control mb-1" placeholder="Name">
-        <input type="text" class="form-control mb-1" placeholder="Roomkey">
+        <input id="name" type="text" class="form-control mb-1" placeholder="Name">
+        <input id="room-code" type="text" class="form-control mb-1" placeholder="Roomkey">
         <button class="sbtn sbtn-green mb-1 float-right" id="join-accept" type="button">
           Join
         </button>
+        <p id="bad-message" class="text-danger"></p>
       </div>
     </div>
+    <div id="play">
+      <p class="text-white">Wait unil the host has started the game or the next round is started.</p>
+    </div>
     <script src="js/lib/jquery-3.4.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="js/login.js"></script>
-    <script>
-      $(function() {
-        $("#join-init").click(function() {
-          $("#join-info").slideDown( "slow", function() {
-            //complete
-          });
-        });
-      });
-    </script>
+    <script src="js/join.js"></script>
   </body>
 </html>

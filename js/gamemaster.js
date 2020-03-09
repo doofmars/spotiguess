@@ -87,6 +87,12 @@
   //Game state
   var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode()};
   var items = null;
+  //sockets
+  var socket = io();
+  socket.emit('room-code', game.roomcode);
+  socket.on('reconnect', function() {
+      socket.emit('room-code-reconnect', game.roomcode);
+  });
 
   $('#room-code').text(game.roomcode);
 
@@ -132,6 +138,14 @@
   } else {
     reset("Missing access token", false);
   }
+
+  socket.on('request-join', function(msg){
+    console.log('Player Joined: ' + msg.name);
+    socket.emit('join-accepted', msg);
+    if (game.phase === 'play') {
+      socket.emit('answers', ['foo', 'bar']);
+    }
+  });
 
   $('#shuffle').click(function(event) {
     if (!access_token) {

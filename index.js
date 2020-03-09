@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
 app.use('/js',
         express.static(__dirname + '/js'));
@@ -15,6 +16,45 @@ app.get('/', function(req, res){
 
 app.get('/gamemaster.html', function(req, res) {
   res.sendFile(__dirname + '/html/' + 'gamemaster.html');
+});
+
+io.on('connection', function(socket){
+  console.log('connected');
+
+  socket.on('room-code', function(roomcode) {
+    console.log('A new server has been created, code:' + roomcode);
+    socket.join(roomcode + '_host');
+  });
+
+  socket.on('room-code-reconnect', function(roomcode) {
+    console.log('A server has reconnected, code:' + roomcode);
+    socket.join(roomcode + '_host');
+  });
+
+  socket.on('request-join', function(msg){
+    socket.leaveAll();
+    console.log('message: ' + JSON.stringify(msg));
+    //Server side validation
+    if (! /^[a-z][-a-z _0-9]{0,15}$/i.test(msg.name)) {
+      console.log('rejected name');
+      return;
+    }
+    if (! /^[A-Z]{5}$/.test(msg.roomcode)) {
+      console.log('rejected code');
+      return;
+    }
+    socket.join(msg.roomcode);
+    socket.to(msg.roomcode + '_host').emit('request-join', msg);
+  });
+
+  socket.on('join-accepted', function(msg){
+    socket.to(msg.roomcode).emit('join-accepted', msg.name);
+  });
+
+
+  socket.on('disconnect', function(){
+    console.log('disconnected');
+  });
 });
 
 http.listen(3000, function(){
