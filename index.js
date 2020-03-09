@@ -31,9 +31,10 @@ io.on('connection', function(socket){
     socket.join(roomcode + '_host');
   });
 
+  // msg: {roomcode:str, name:str}
   socket.on('request-join', function(msg){
     socket.leaveAll();
-    console.log('message: ' + JSON.stringify(msg));
+    console.log('Join request: ' + JSON.stringify(msg));
     //Server side validation
     if (! /^[a-z][-a-z _0-9]{0,15}$/i.test(msg.name)) {
       console.log('rejected name');
@@ -47,8 +48,15 @@ io.on('connection', function(socket){
     socket.to(msg.roomcode + '_host').emit('request-join', msg);
   });
 
+  // msg: {roomcode:str, name:str}
   socket.on('join-accepted', function(msg){
     socket.to(msg.roomcode).emit('join-accepted', msg.name);
+  });
+
+  // msg: {roomcode:str, options:Set}
+  socket.on('options', function(msg){
+    console.log('options for room: ' + JSON.stringify(msg));
+    socket.to(msg.roomcode).emit('options', msg.options);
   });
 
 

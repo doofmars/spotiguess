@@ -49,13 +49,21 @@
     }
   }
 
+  function loadOptions() {
+    var set = new Set();
+    items.forEach(function callback(item) {
+      set.add(item.added_by.id);
+    });
+    game.options = Array.from(set);
+  }
+
   /**
    * Set the stage for the next song
    */
   function setNextSong() {
     if (game.phase === "play" && items !== null) {
       var item = items[Math.floor(Math.random() * items.length)];
-      console.log('selected: ' + item.track.name);
+      console.log('selected: ' + item.track.name + ' ' + item.track.preview_url);
       $('#song').html(songTempalate(item));
       $('#audioPreviewUrl').on("canplay", function() {
         $('#audioPreviewUrl')[0].play();
@@ -143,7 +151,7 @@
     console.log('Player Joined: ' + msg.name);
     socket.emit('join-accepted', msg);
     if (game.phase === 'play') {
-      socket.emit('answers', ['foo', 'bar']);
+      socket.emit('options', {roomcode:game.roomcode, options:game.options});
     }
   });
 
@@ -166,6 +174,9 @@
          },
          success: function(response) {
            items = response.items;
+           loadOptions();
+           console.log('Detected options: ' + JSON.stringify(game.options));
+           socket.emit('options', {roomcode:game.roomcode, options:game.options});
            setNextSong();
            $('#play').show();
          },

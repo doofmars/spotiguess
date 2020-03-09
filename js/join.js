@@ -48,4 +48,11 @@
     var session = { name:name, roomcode:code};
     joinGame(session);
   });
+
+  socket.on('options', function(msg){
+    msg.forEach(function callback(option) {
+      console.log(option);
+    });
+  });
+
 })();
