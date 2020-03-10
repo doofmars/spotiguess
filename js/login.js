@@ -15,7 +15,8 @@
     }
     return text;
   }
-  document.getElementById('login-button').addEventListener('click', function() {
+
+  $('#login-button').click(function(event) {
     var client_id = '10bc80659da04939b8ff8b6014793016'; // Your client id
     var redirect_uri = 'http://localhost:3000/gamemaster.html'; // Your redirect uri
 
@@ -33,5 +34,5 @@
     url += '&state=' + encodeURIComponent(state);
 
     window.location = url;
-  }, false);
+  });
 })();
