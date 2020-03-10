@@ -33,7 +33,7 @@
     });
   });
 
-  $('#join-accept').click(function(event) {
+  function joinAccept(event) {
     var name = $('#name').val();
     var code = $('#room-code').val().toUpperCase();
     if (! /^[a-z][-a-z _0-9]{0,15}$/i.test(name)) {
@@ -47,7 +47,15 @@
     $('#bad-message').hide();
     var session = { name:name, roomcode:code, options:false};
     joinGame(session);
+  }
+  $('#room-code').keyup(function(e){
+      if(e.keyCode == 13)
+      {
+          $(this).trigger("enterKey");
+      }
   });
+  $('#room-code').bind("enterKey", joinAccept);
+  $('#join-accept').click(joinAccept);
 
   socket.on('options', function(msg){
     $('#waiting').hide();
