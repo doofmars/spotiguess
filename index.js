@@ -59,6 +59,12 @@ io.on('connection', function(socket){
     socket.to(msg.roomcode).emit('options', msg.options);
   });
 
+  // msg: {name:str, roomcode:str, option:str}
+  socket.on('vote', function(msg){
+    console.log('Player voted: ' + JSON.stringify(msg));
+    socket.to(msg.roomcode + '_host').emit('vote', msg);
+  });
+
 
   socket.on('disconnect', function(){
     console.log('disconnected');

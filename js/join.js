@@ -45,14 +45,30 @@
       return;
     }
     $('#bad-message').hide();
-    var session = { name:name, roomcode:code};
+    var session = { name:name, roomcode:code, options:false};
     joinGame(session);
   });
 
   socket.on('options', function(msg){
-    msg.forEach(function callback(option) {
-      console.log(option);
-    });
+    $('#waiting').hide();
+    if (!session.options) {
+      session.options = true;
+      msg.forEach(function callback(option) {
+        $('#play').append(
+          '<button class="sbtn sbtn-green mb-1 btn-block option" value="'+
+          option+'">'+option+'</button>'
+        );
+        console.log("Added: " + option);
+      });
+      $('.option').click(function(event) {
+        socket.emit('vote',
+                {
+                  name:session.name,
+                  roomcode:session.roomcode,
+                  option:event.currentTarget.value
+                });
+      });
+    }
   });
 
 })();

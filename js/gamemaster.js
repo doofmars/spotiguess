@@ -93,7 +93,7 @@
     storedState = localStorage.getItem(stateKey);
   var access_token = null;
   //Game state
-  var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode()};
+  var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode(), players:new Map()};
   var items = null;
   //sockets
   var socket = io();
@@ -148,11 +148,20 @@
   }
 
   socket.on('request-join', function(msg){
-    console.log('Player Joined: ' + msg.name);
+
     socket.emit('join-accepted', msg);
     if (game.phase === 'play') {
       socket.emit('options', {roomcode:game.roomcode, options:game.options});
     }
+    if (game.players.get(msg.name)) {
+      console.log('Player Rejoined: ' + msg.name);
+    } else {
+      console.log('Player Joined: ' + msg.name);
+      game.players.set(msg.name, {score: 0, currentVote:""});
+      $('.players').append('<button class="sbtn sbtn-green mb-1 float-right" id="'+
+                           msg.name+'">'+msg.name+'</button>');
+    }
+
   });
 
   $('#shuffle').click(function(event) {
@@ -185,6 +194,10 @@
          }
        });
     }
+  });
+
+  socket.on('vote', function(msg){
+    console.log('Got player ' + msg.name + " voted for:" + msg.option);
   });
 
 
