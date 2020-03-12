@@ -61,11 +61,16 @@
    * Set the stage for the next song
    */
   function setNextSong() {
+    clearInterval(interval);
+    if (game.round >= game.roundMax - 1) {
+      game.phase = 'finish';
+      showFinish();
+    }
     if (game.phase === "play" && items !== null) {
-      clearInterval(interval);
       var item = items[Math.floor(Math.random() * items.length)];
       game.answer = item.added_by.id;
-      console.log('selected: ' + item.track.name + ' ' + item.track.preview_url);
+      game.round += 1;
+      console.log(game.round + ': selected ' + item.track.name + ' ' + item.track.preview_url);
       $('#song').html(songTempalate(item));
       $('#audioPreviewUrl').on("canplay", function() {
         $('#audioPreviewUrl')[0].play();
@@ -110,7 +115,7 @@
    * Reveal the results
    */
   function showResults() {
-    game.players.forEach(function each(player, name, map) {
+    game.players.forEach(function each(player, name) {
       if (player.currentVote === game.answer) {
         $('.play #'+name).removeClass('sbtn-white').addClass('sbtn-green');
         player.score += 1;
@@ -119,7 +124,29 @@
       }
       player.currentVote = '';
     });
+  }
 
+  /**
+   * Show end screen
+   */
+  function showFinish() {
+    var results = [];
+    var max = 0;
+    game.players.forEach(function each(player, name) {
+      if (player.score > max) {
+        results.unshift({name:name, score:player.score});
+        max = player.score;
+      } else {
+        results.push({name:name, score:player.score});
+      }
+    });
+    results.forEach(function each(val, index) {
+      $('#results').append('<tr><th scope="row">' + (index + 1) +
+        '</th><td>' + val.name + '</td><td>' + val.score + '</td></tr>');
+    });
+    $('#play').hide('slow', function() {
+      $('#finish').show('fast');
+    });
   }
 
   //Templates
@@ -134,6 +161,8 @@
   var game = {
     pos:-1,
     id:"",
+    round:0,
+    roundMax:30,
     phase:"create",
     roomcode:generateRoomCode(),
     players:new Map(), //values: {score:num, currentVote:str}
