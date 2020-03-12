@@ -68,6 +68,13 @@
       $('#audioPreviewUrl').on("canplay", function() {
         $('#audioPreviewUrl')[0].play();
       });
+      socket.emit('next-song',
+                  {
+                    roomcode:game.roomcode,
+                    title:item.track.name,
+                    artist:item.track.artists[0].name
+                  });
+      $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-green')
       var countdownNumberEl = $('#countdown-number');
       var countdown = 30;
       var interval = setInterval(function() {
@@ -198,6 +205,7 @@
 
   socket.on('vote', function(msg){
     console.log('Got player ' + msg.name + " voted for:" + msg.option);
+    $('.play #'+msg.name).removeClass('sbtn-green').addClass('sbtn-white');
   });
 
 

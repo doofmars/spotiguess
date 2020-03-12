@@ -34,7 +34,7 @@
       </p>
       <div id="join-info">
         <input id="name" type="text" class="form-control mb-1" placeholder="Name">
-        <input id="room-code" type="text" class="form-control mb-1" placeholder="Roomkey">
+        <input id="room-code" type="text" class="form-control mb-1" maxlength="5" placeholder="Roomkey">
         <button class="sbtn sbtn-green mb-1 float-right" id="join-accept" type="button">
           Join
         </button>
@@ -42,6 +42,7 @@
       </div>
     </div>
     <div id="play">
+      <p class="text-white" id="song"></p>
       <p class="text-white" id="waiting">Wait until the host has started the game or the next round is started.</p>
     </div>
     <script src="js/lib/jquery-3.4.1.min.js"></script>

@@ -69,14 +69,23 @@
         console.log("Added: " + option);
       });
       $('.option').click(function(event) {
+        $('.option').removeClass('sbtn-white').addClass('sbtn-green');
         socket.emit('vote',
                 {
                   name:session.name,
                   roomcode:session.roomcode,
                   option:event.currentTarget.value
                 });
+        event.currentTarget.classList.remove('sbtn-green');
+        event.currentTarget.classList.add('sbtn-white');
       });
     }
+  });
+
+  socket.on('next-song', function(msg){
+    console.log("Next track" + JSON.stringify(msg));
+    $('#song').text(msg.title + ' - ' + msg.artists);
+    $('.option').removeClass('sbtn-white').addClass('sbtn-green');
   });
 
 })();
