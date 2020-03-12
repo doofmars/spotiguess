@@ -71,43 +71,48 @@
       game.answer = item.added_by.id;
       game.round += 1;
       console.log(game.round + ': selected ' + item.track.name + ' ' + item.track.preview_url);
-      $('#song').html(songTempalate(item));
+      $('#audioPreviewUrl').attr('src', item.track.preview_url);
       $('#audioPreviewUrl').on("canplay", function() {
         $('#audioPreviewUrl')[0].play();
       });
-      var countdown = 20;
-      var date = new Date();
-      date.setSeconds(date.getSeconds() + countdown);
-      var now = date.getTime();
-      currentSong = {
-                    roomcode:game.roomcode,
-                    title:item.track.name,
-                    artist:item.track.artists[0].name,
-                    votetime:now
-                  };
-      socket.emit('next-song', currentSong);
-      $('.play .sbtn')
-      .removeClass('sbtn-white')
-      .removeClass('sbtn-green')
-      .removeClass('sbtn-red')
-      .addClass('sbtn-yellow');
-      var countdownNumberEl = $('#countdown-number');
+      $('#song').fadeOut("fast", function() {
+        $('#song').html(songTempalate(item));
+        $('#song').fadeIn("fast", function() {
+          var countdown = 20;
+          var date = new Date();
+          date.setSeconds(date.getSeconds() + countdown);
+          var now = date.getTime();
+          currentSong = {
+                        roomcode:game.roomcode,
+                        title:item.track.name,
+                        artist:item.track.artists[0].name,
+                        votetime:now
+                      };
+          socket.emit('next-song', currentSong);
+          $('.play .sbtn')
+          .removeClass('sbtn-white')
+          .removeClass('sbtn-green')
+          .removeClass('sbtn-red')
+          .addClass('sbtn-yellow');
+          var countdownNumberEl = $('#countdown-number');
 
-      interval = setInterval(function() {
-        countdown = --countdown;
+          interval = setInterval(function() {
+            countdown = --countdown;
 
-        if (countdown <= 0) {
-          clearInterval(interval);
-          $('#countdown').hide();
-          $('#added-by').show();
-          showResults();
-          setTimeout(function () {
-            setNextSong();
-          }, 4500);
-        }
+            if (countdown <= 0) {
+              clearInterval(interval);
+              $('#countdown').hide();
+              $('#added-by').show();
+              showResults();
+              setTimeout(function () {
+                setNextSong();
+              }, 4500);
+            }
 
-        countdownNumberEl.text(countdown);
-      }, 1000);
+            countdownNumberEl.text(countdown);
+          }, 1000);
+        });
+      });
     }
   }
 
