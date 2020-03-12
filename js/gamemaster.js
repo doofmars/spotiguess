@@ -206,7 +206,7 @@
     players:new Map(),       //values: {score:num, currentVote:str}
     answer:null              //Current answer
   };
-  var items = null;
+  var items = [];
   var currentSong = null;
   var interval = null;
   //sockets
@@ -293,26 +293,40 @@
        $('#login').hide();
        $('#create').hide();
        game.phase = "play";
-       $.ajax({
-         url: 'https://api.spotify.com/v1/playlists/'+game.id+'/tracks',
-         headers: {
-           'Authorization': 'Bearer ' + access_token
-         },
-         success: function(response) {
-           items = response.items;
-           shuffleArray(items)
-           loadOptions();
-           console.log('Detected options: ' + JSON.stringify(game.options));
-           socket.emit('options', {roomcode:game.roomcode, options:game.options});
-           setNextSong();
-           $('#play').show();
-         },
-         error: function(response) {
-           reset("Invalid access token", true);
-         }
+
+       getItems(0, function() {
+         console.log('Total items: ' + items.length);
+         shuffleArray(items);
+         loadOptions();
+         console.log('Detected options: ' + JSON.stringify(game.options));
+         socket.emit('options', {roomcode:game.roomcode, options:game.options});
+         setNextSong();
+         $('#play').show();
        });
     }
   });
+
+  function getItems(offset, callback) {
+    $.ajax({
+      url: 'https://api.spotify.com/v1/playlists/'+game.id+'/tracks?offset=' + offset,
+      headers: {
+        'Authorization': 'Bearer ' + access_token
+      },
+      success: function(response) {
+        var stats = {limit:response.limit, offset:response.offset, total:response.total};
+        console.log('Received items: ' + JSON.stringify(stats));
+        items = items.concat(response.items);
+        if (offset + 100 < response.total) {
+          getItems(offset + 100, callback);
+        } else {
+          callback();
+        }
+      },
+      error: function(response) {
+        reset("Invalid access token", true);
+      }
+    });
+  }
 
   socket.on('vote', function(msg){
     console.log('Got player ' + msg.name + " voted for:" + msg.option);
