@@ -62,8 +62,18 @@ h1 {
   color: #2e77d0;
 }
 
+.sbtn-yellow {
+  background-color: #fff85b;
+  color: #000;
+}
+
 .sbtn-green {
   background-color: #1ed760;
+  color: #fff;
+}
+
+.sbtn-red {
+  background-color: #ff3424;
   color: #fff;
 }
 

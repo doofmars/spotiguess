@@ -72,14 +72,14 @@
       var date = new Date();
       date.setSeconds(date.getSeconds() + countdown);
       var now = date.getTime();
-      socket.emit('next-song',
-                  {
+      currentSong = {
                     roomcode:game.roomcode,
                     title:item.track.name,
                     artist:item.track.artists[0].name,
                     votetime:now
-                  });
-      $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-green')
+                  };
+      socket.emit('next-song', currentSong);
+      $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-yellow')
       var countdownNumberEl = $('#countdown-number');
 
       var interval = setInterval(function() {
@@ -107,6 +107,7 @@
   //Game state
   var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode(), players:new Map()};
   var items = null;
+  var currentSong = null;
   //sockets
   var socket = io();
   socket.emit('room-code', game.roomcode);
@@ -164,13 +165,16 @@
     socket.emit('join-accepted', msg);
     if (game.phase === 'play') {
       socket.emit('options', {roomcode:game.roomcode, options:game.options});
+      if (currentSong !== null) {
+        socket.emit('next-song', currentSong);
+      }
     }
     if (game.players.get(msg.name)) {
       console.log('Player Rejoined: ' + msg.name);
     } else {
       console.log('Player Joined: ' + msg.name);
       game.players.set(msg.name, {score: 0, currentVote:""});
-      $('.players').append('<button class="sbtn sbtn-green mb-1 float-right" id="'+
+      $('.players').append('<button class="sbtn sbtn-yellow mb-1 float-right" id="'+
                            msg.name+'">'+msg.name+'</button>');
     }
 
@@ -210,7 +214,7 @@
 
   socket.on('vote', function(msg){
     console.log('Got player ' + msg.name + " voted for:" + msg.option);
-    $('.play #'+msg.name).removeClass('sbtn-green').addClass('sbtn-white');
+    $('.play #'+msg.name).removeClass('sbtn-yellow').addClass('sbtn-white');
   });
 
 
