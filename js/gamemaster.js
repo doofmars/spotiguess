@@ -76,7 +76,7 @@
                   });
       $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-green')
       var countdownNumberEl = $('#countdown-number');
-      var countdown = 30;
+      var countdown = 20;
       var interval = setInterval(function() {
         countdown = --countdown;
 
