@@ -20,6 +20,18 @@
   }
 
   /**
+   * Randomize array in-place using Durstenfeld shuffle algorithm
+   */
+  function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+      }
+  }
+
+  /**
    * Generates a room code string containing only uppercase letters
    * @return {string} The generated string
    */
@@ -58,16 +70,35 @@
   }
 
   /**
+   * Helper to retieve an item
+   *
+   * @params get the next item from the items list
+   * @return an item or null if no more items in list
+   */
+  function getNextItem() {
+    if (game.itemsID >= items.length) {
+      return null;
+    }
+    var item = items[game.itemsID];
+    game.itemsID += 1;
+    if (game.missingPreviewSkip && item.track.preview_url === null) {
+      return getNextItem();
+    } else {
+      return item;
+    }
+  }
+
+  /**
    * Set the stage for the next song
    */
   function setNextSong() {
     clearInterval(interval);
-    if (game.round >= game.roundMax - 1) {
+    var item = getNextItem();
+    if (game.round >= game.roundMax || item === null) {
       game.phase = 'finish';
       showFinish();
     }
     if (game.phase === "play" && items !== null) {
-      var item = items[Math.floor(Math.random() * items.length)];
       game.answer = item.added_by.id;
       game.round += 1;
       console.log(game.round + ': selected ' + item.track.name + ' ' + item.track.preview_url);
@@ -164,14 +195,16 @@
   var access_token = null;
   //Game state
   var game = {
-    pos:-1,
-    id:"",
-    round:0,
-    roundMax:30,
-    phase:"create",
-    roomcode:generateRoomCode(),
-    players:new Map(), //values: {score:num, currentVote:str}
-    answer:null
+    pos:-1,                  //Selected palaylist position
+    id:"",                   //Selected palaylist id
+    itemsID:0,               //Position in shuffled playlist items
+    round:0,                 //Current round
+    roundMax:30,             //max number of rounds
+    missingPreviewSkip:true, //skip songs without preview
+    phase:"create",          // game pahse
+    roomcode:generateRoomCode(), //the room code to join
+    players:new Map(),       //values: {score:num, currentVote:str}
+    answer:null              //Current answer
   };
   var items = null;
   var currentSong = null;
@@ -267,6 +300,7 @@
          },
          success: function(response) {
            items = response.items;
+           shuffleArray(items)
            loadOptions();
            console.log('Detected options: ' + JSON.stringify(game.options));
            socket.emit('options', {roomcode:game.roomcode, options:game.options});
