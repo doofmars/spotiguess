@@ -64,6 +64,7 @@
     if (game.phase === "play" && items !== null) {
       clearInterval(interval);
       var item = items[Math.floor(Math.random() * items.length)];
+      game.answer = item.added_by.id;
       console.log('selected: ' + item.track.name + ' ' + item.track.preview_url);
       $('#song').html(songTempalate(item));
       $('#audioPreviewUrl').on("canplay", function() {
@@ -80,21 +81,45 @@
                     votetime:now
                   };
       socket.emit('next-song', currentSong);
-      $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-yellow')
+      $('.play .sbtn')
+      .removeClass('sbtn-white')
+      .removeClass('sbtn-green')
+      .removeClass('sbtn-red')
+      .addClass('sbtn-yellow');
       var countdownNumberEl = $('#countdown-number');
 
       interval = setInterval(function() {
         countdown = --countdown;
 
         if (countdown <= 0) {
+          clearInterval(interval);
           $('#countdown').hide();
           $('#added-by').show();
-          clearInterval(interval);
+          showResults();
+          setTimeout(function () {
+            setNextSong();
+          }, 4500);
         }
 
         countdownNumberEl.text(countdown);
       }, 1000);
     }
+  }
+
+  /**
+   * Reveal the results
+   */
+  function showResults() {
+    game.players.forEach(function each(player, name, map) {
+      if (player.currentVote === game.answer) {
+        $('.play #'+name).removeClass('sbtn-white').addClass('sbtn-green');
+        player.score += 1;
+      } else {
+        $('.play #'+name).removeClass('sbtn-white').addClass('sbtn-red');
+      }
+      player.currentVote = '';
+    });
+
   }
 
   //Templates
@@ -106,7 +131,14 @@
     storedState = localStorage.getItem(stateKey);
   var access_token = null;
   //Game state
-  var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode(), players:new Map()};
+  var game = {
+    pos:-1,
+    id:"",
+    phase:"create",
+    roomcode:generateRoomCode(),
+    players:new Map(), //values: {score:num, currentVote:str}
+    answer:null
+  };
   var items = null;
   var currentSong = null;
   var interval = null;
@@ -217,6 +249,10 @@
   socket.on('vote', function(msg){
     console.log('Got player ' + msg.name + " voted for:" + msg.option);
     $('.play #'+msg.name).removeClass('sbtn-yellow').addClass('sbtn-white');
+    var player = game.players.get(msg.name);
+    if (player) {
+      player.currentVote = msg.option;
+    }
   });
 
 
