@@ -62,6 +62,7 @@
    */
   function setNextSong() {
     if (game.phase === "play" && items !== null) {
+      clearInterval(interval);
       var item = items[Math.floor(Math.random() * items.length)];
       console.log('selected: ' + item.track.name + ' ' + item.track.preview_url);
       $('#song').html(songTempalate(item));
@@ -82,7 +83,7 @@
       $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-yellow')
       var countdownNumberEl = $('#countdown-number');
 
-      var interval = setInterval(function() {
+      interval = setInterval(function() {
         countdown = --countdown;
 
         if (countdown <= 0) {
@@ -108,6 +109,7 @@
   var game = {pos:-1, id:"", phase:"create", roomcode:generateRoomCode(), players:new Map()};
   var items = null;
   var currentSong = null;
+  var interval = null;
   //sockets
   var socket = io();
   socket.emit('room-code', game.roomcode);
