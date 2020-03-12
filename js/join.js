@@ -45,7 +45,13 @@
       return;
     }
     $('#bad-message').hide();
-    var session = { name:name, roomcode:code, options:false};
+    var date = new Date();
+    var session = {
+      name:name,
+      roomcode:code,
+      options:false,
+      votetime:date.getTime()
+    };
     joinGame(session);
   }
   $('#room-code').keyup(function(e){
@@ -69,22 +75,26 @@
         console.log("Added: " + option);
       });
       $('.option').click(function(event) {
-        $('.option').removeClass('sbtn-white').addClass('sbtn-green');
-        socket.emit('vote',
-                {
-                  name:session.name,
-                  roomcode:session.roomcode,
-                  option:event.currentTarget.value
-                });
-        event.currentTarget.classList.remove('sbtn-green');
-        event.currentTarget.classList.add('sbtn-white');
+        var nowDate = new Date();
+        if (nowDate.getTime() < session.votetime) {
+          $('.option').removeClass('sbtn-white').addClass('sbtn-green');
+          socket.emit('vote',
+                  {
+                    name:session.name,
+                    roomcode:session.roomcode,
+                    option:event.currentTarget.value
+                  });
+          event.currentTarget.classList.remove('sbtn-green');
+          event.currentTarget.classList.add('sbtn-white');
+        }
       });
     }
   });
 
   socket.on('next-song', function(msg){
     console.log("Next track" + JSON.stringify(msg));
-    $('#song').text(msg.title + ' - ' + msg.artists);
+    session.votetime = msg.votetime;
+    $('#song').text(msg.title + ' - ' + msg.artist);
     $('.option').removeClass('sbtn-white').addClass('sbtn-green');
   });
 

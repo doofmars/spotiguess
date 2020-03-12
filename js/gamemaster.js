@@ -68,15 +68,20 @@
       $('#audioPreviewUrl').on("canplay", function() {
         $('#audioPreviewUrl')[0].play();
       });
+      var countdown = 20;
+      var date = new Date();
+      date.setSeconds(date.getSeconds() + countdown);
+      var now = date.getTime();
       socket.emit('next-song',
                   {
                     roomcode:game.roomcode,
                     title:item.track.name,
-                    artist:item.track.artists[0].name
+                    artist:item.track.artists[0].name,
+                    votetime:now
                   });
       $('.play .sbtn').removeClass('sbtn-white').addClass('sbtn-green')
       var countdownNumberEl = $('#countdown-number');
-      var countdown = 20;
+
       var interval = setInterval(function() {
         countdown = --countdown;
 
