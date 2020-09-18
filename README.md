@@ -8,7 +8,14 @@ with the main question: "who did actually add this song".
 These project originated from an idea to use the shared play-list
 that I had with a friend to play as a guessing game.
 
-Planned Features:
+# Setup:
+
+Install requiremennts
+Run index.js for nodejs server + express for frontend delivery
+`node index.js`
+The server will listen on port 300
+
+# Planned Features:
 
 - Connect to Spotify API to get your collaborative play-lists
 - Select a play-list
