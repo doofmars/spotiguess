@@ -10,14 +10,15 @@ export default class Creategame extends React.Component {
     super(props);
     this.state = {
       room: props.room,
+      connected: true
     };
   }
 
   render() {
     return (
      <div className="container">
-       <Login />
-       <Create />
+       <Login visible={this.state.connected}/>
+       <Create visible={!this.state.connected} />
      </div>
     );
   }
@@ -28,6 +29,9 @@ Creategame.propTypes = {
 };
 
 function Login(props) {
+  if (props.visible) {
+    return null;
+  }
   return (
     <div id="login">
       <h1 className="cyan">Gamemaster
@@ -40,6 +44,9 @@ function Login(props) {
 }
 
 function Create(props) {
+  if (props.visible) {
+    return null;
+  }
   return (
     <div id="create">
       <div id="playlists">
