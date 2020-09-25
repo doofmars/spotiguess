@@ -30,9 +30,6 @@ export default class App extends React.Component {
 
     return (
       <div>
-        <p className="text-white mb-4">
-          {this.state.view}
-        </p>
         {view}
       </div>
     );
