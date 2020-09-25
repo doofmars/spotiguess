@@ -1,12 +1,18 @@
 import React from 'react';
-import './Score.css';
+import './Host.css';
+import Creategame from './Creategame.js'
 
-export default class Score extends React.Component {
+export default class Host extends React.Component {
 
   render() {
     return (
-      <div className="Score">
-      </div>
+      <React.Fragment>
+        <div class="corner-ribbon top-right sticky magenta">
+          Room Code<br />
+          <b id="room-code"></b>
+        </div>
+        <Creategame></Creategame>
+      </React.Fragment>
     );
   }
 }
