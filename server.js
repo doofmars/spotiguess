@@ -3,19 +3,11 @@ var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-app.use('/js',
-        express.static(__dirname + '/js'));
-app.use('/css',
-        express.static(__dirname + '/css'));
-app.use('/templates',
-        express.static(__dirname + '/templates'));
+app.use('/',
+        express.static(__dirname + '/build'));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/html/' + 'index.html');
-});
-
-app.get('/gamemaster.html', function(req, res) {
-  res.sendFile(__dirname + '/html/' + 'gamemaster.html');
+  res.sendFile(__dirname + '/build/' + 'index.html');
 });
 
 io.on('connection', function(socket){

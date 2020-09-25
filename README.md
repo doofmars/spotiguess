@@ -36,8 +36,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     + Who has added the most unavailable songs (from the perspective of the game master)
 - Admin interface on the game master
 
+# Setup:
 
-## Available Scripts
+The frontend is developped with react the backend uses socket io for client to client communication.
+Run server.js for nodejs server + express for frontend delivery
+`node server`
+The server will listen on port 3000
+If frontend has been build `yarn build` the server uses the express framework to deliver the app build for production.
+
+## React development
 
 In the project directory, you can run:
 
