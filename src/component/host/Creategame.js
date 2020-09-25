@@ -1,7 +1,15 @@
 import React from 'react';
 import './Creategame.css';
+import PropTypes from 'prop-types';
 
 export default class Creategame extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      room: props.room,
+    };
+  }
 
   render() {
     return (
@@ -12,6 +20,10 @@ export default class Creategame extends React.Component {
     );
   }
 }
+
+Creategame.propTypes = {
+  room: PropTypes.string.isRequired
+};
 
 function Login(props) {
   return (
