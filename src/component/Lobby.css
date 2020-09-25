@@ -1,0 +1,78 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/* The buttons */
+.sbtn {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+  letter-spacing: 1.76px;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  border-radius: 500px;
+  -webkit-transition: all 33ms cubic-bezier(.3,0,0,1);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: all 33ms cubic-bezier(.3,0,0,1);
+  will-change: transform;
+  white-space: nowrap;
+  padding: 8px 34px;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sbtn:hover {
+  -webkit-transform: scale(1.06);
+  transform: scale(1.06);
+}
+
+.sbtn:active {
+ outline: none;
+ -moz-outline: none;
+}
+
+.sbtn-white {
+  background-color: #fff;
+  color: #2e77d0;
+}
+
+.sbtn-yellow {
+  background-color: #fff85b;
+  color: #000;
+}
+
+.sbtn-green {
+  background-color: #1ed760;
+  color: #fff;
+}
+
+.sbtn-red {
+  background-color: #ff3424;
+  color: #fff;
+}
+
+.selected {
+  background-color: #7E858C;
+}
+
+.content {
+  width: 100%;
+  max-width: 650px;
+  margin: auto;
+}
+
+.content-start {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  margin: auto;
+}
