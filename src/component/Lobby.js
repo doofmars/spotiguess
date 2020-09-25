@@ -2,6 +2,7 @@ import React from 'react';
 import './Lobby.css';
 import {SlideDown} from 'react-slidedown'
 import 'react-slidedown/lib/slidedown.css'
+import PropTypes from 'prop-types';
 
 export default class Lobby extends React.Component {
 
@@ -23,7 +24,7 @@ export default class Lobby extends React.Component {
         <div className="Lobby">
           <h1 class="cyan mb-3 block">Spotiguess</h1>
           <div id="gamestart">
-            <button class="sbtn sbtn-green mb-1 btn-block" id="login-button" type="button">
+            <button class="sbtn sbtn-green mb-1 btn-block" id="login-button" type="button" onClick={this.props.viewChangeEvent.bind(this, 'host')}>
               Create new game
             </button>
             <p class="text-white mb-4">
@@ -43,6 +44,10 @@ export default class Lobby extends React.Component {
     );
   }
 }
+
+Lobby.propTypes = {
+  viewChangeEvent: PropTypes.func.isRequired
+};
 
 function LoginInfo(props) {
   return (
