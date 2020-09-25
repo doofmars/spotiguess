@@ -1,21 +1,9 @@
 Spotiguess
 ==========
 
-This is a small web application that uses the Spotify API
-to fetch shared play-lists and creates a small guessing game
-with the main question: "who did actually add this song".
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-These project originated from an idea to use the shared play-list
-that I had with a friend to play as a guessing game.
-
-# Setup:
-
-Install requiremennts
-Run index.js for nodejs server + express for frontend delivery
-`node index.js`
-The server will listen on port 300
-
-# Planned Features:
+# Features:
 
 - Connect to Spotify API to get your collaborative play-lists
 - Select a play-list
@@ -26,7 +14,7 @@ The server will listen on port 300
 - Up to 4 players can join the session using the key
     + Mobile devices, tablets or smart-phones
     + Desktop devices also possible
-- Random song is selected from play-list with
+- Random song is selected from play-list
     + Information presented: album cover, artist, title and sample music
 - The player can select any collaborator of the play-list as answer.
 - Points are awarded for correct answers.
@@ -47,3 +35,37 @@ The server will listen on port 300
     + Who has the longest streak (in time)
     + Who has added the most unavailable songs (from the perspective of the game master)
 - Admin interface on the game master
+
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `yarn start`
+
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
+
+### `yarn test`
+
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `yarn build`
+
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `yarn eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+
