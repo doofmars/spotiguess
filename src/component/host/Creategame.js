@@ -3,6 +3,7 @@ import './Creategame.css';
 import PropTypes from 'prop-types';
 import { playlists } from "./../../sample_pls.js";
 import Image from 'react-bootstrap/Image'
+import { HostContext } from './HostContextProvider.js'
 
 export default class Creategame extends React.Component {
 
@@ -96,37 +97,24 @@ class PlaylistTable extends React.Component {
 }
 
 class PlaylistRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.toggleClass = this.toggleClass.bind(this);
-    this.state = {
-      active: false,
-    };
-  }
-
-  static propTypes = {
-    selectEvent: PropTypes.func,
-  };
-
-  toggleClass() {
-    const currentState = this.state.active;
-    this.setState({ active: !currentState });
-  };
-
   render() {
     return (
-      <tr id={this.props.index} className={this.state.active ? 'selected': null}>
-        <th scope="row">{this.props.index + 1}</th>
-        <td><Image width="150" height="150" thumbnail  src={this.props.item.images[0].url}/></td>
-        <td>{this.props.item.name}</td>
-        <td>{this.props.item.owner.display_name}</td>
-        <td>{this.props.item.tracks.total}</td>
-        <td>
-          <button className="sbtn sbtn-green" id={this.props.item.id} value={this.props.index} type="button" onClick={this.toggleClass}>
-            Select
-          </button>
-        </td>
-      </tr>
+      <HostContext.Consumer>
+        {(context) => (
+        <tr id={this.props.index} className={context.state.selected === this.props.index ? 'selected': null}>
+          <th scope="row">{this.props.index + 1}</th>
+          <td><Image width="150" height="150" thumbnail  src={this.props.item.images[0].url}/></td>
+          <td>{this.props.item.name}</td>
+          <td>{this.props.item.owner.display_name}</td>
+          <td>{this.props.item.tracks.total}</td>
+          <td>
+            <button className="sbtn sbtn-green" id={this.props.item.id} value={this.props.index} type="button" onClick={()=>{context.setSelected(this.props.index)}}>
+              Select
+            </button>
+          </td>
+        </tr>
+        )}
+      </HostContext.Consumer>
     );
   }
 }

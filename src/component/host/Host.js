@@ -1,6 +1,7 @@
 import React from 'react';
 import './Host.css';
 import Creategame from './Creategame.js'
+import {HostContextProvider} from './HostContextProvider.js'
 
 export default class Host extends React.Component {
 
@@ -11,13 +12,13 @@ export default class Host extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <HostContextProvider>
         <div className="corner-ribbon top-right sticky magenta">
           Room Code<br />
           <b id="room-code">{this.state.room}</b>
         </div>
         <Creategame room={this.state.room} />
-      </React.Fragment>
+      </HostContextProvider>
     );
   }
 }
