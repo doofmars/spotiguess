@@ -69,46 +69,65 @@ function Create(props) {
   );
 }
 
-
-function PlaylistTable(props) {
-  return (
-    <table className="table table-dark">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Image</th>
-          <th scope="col">Name</th>
-          <th scope="col">Owner</th>
-          <th scope="col">Tracks</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody id="playlists">
-        { playlists.items.map((item, index) => {
-          return (
-            <PlaylistRow item={item} index={index} key={index} />
-          );
-        })}
-      </tbody>
-    </table>
-  );
+class PlaylistTable extends React.Component {
+  render() {
+    return (
+      <table className="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Tracks</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody id="playlists">
+          { playlists.items.map((item, index) => {
+            return (
+              <PlaylistRow item={item} index={index} key={index} selectEvent={this.selectEvent} />
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
 }
 
+class PlaylistRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleClass = this.toggleClass.bind(this);
+    this.state = {
+      active: false,
+    };
+  }
 
-function PlaylistRow(props) {
-  return (
-    <tr id={props.index}>
-      <th scope="row">{props.index + 1}</th>
-      <td><Image width="150" height="150" thumbnail  src={props.item.images[0].url}/></td>
-      <td>{props.item.name}</td>
-      <td>{props.item.owner.display_name}</td>
-      <td>{props.item.tracks.total}</td>
-      <td>
-        <button className="sbtn sbtn-green" id={props.item.id} value={props.index} type="button">
-          Select
-        </button>
-      </td>
-    </tr>
-  );
+  static propTypes = {
+    selectEvent: PropTypes.func,
+  };
+
+  toggleClass() {
+    const currentState = this.state.active;
+    this.setState({ active: !currentState });
+  };
+
+  render() {
+    return (
+      <tr id={this.props.index} className={this.state.active ? 'selected': null}>
+        <th scope="row">{this.props.index + 1}</th>
+        <td><Image width="150" height="150" thumbnail  src={this.props.item.images[0].url}/></td>
+        <td>{this.props.item.name}</td>
+        <td>{this.props.item.owner.display_name}</td>
+        <td>{this.props.item.tracks.total}</td>
+        <td>
+          <button className="sbtn sbtn-green" id={this.props.item.id} value={this.props.index} type="button" onClick={this.toggleClass}>
+            Select
+          </button>
+        </td>
+      </tr>
+    );
+  }
 }
 
