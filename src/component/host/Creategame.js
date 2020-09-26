@@ -18,8 +18,8 @@ export default class Creategame extends React.Component {
   render() {
     return (
      <div className="container">
-       <Login visible={this.state.connected}/>
-       <Create visible={!this.state.connected} />
+       <Login visible={!this.state.connected}/>
+       <Create visible={this.state.connected} />
      </div>
     );
   }
@@ -29,45 +29,49 @@ Creategame.propTypes = {
   room: PropTypes.string.isRequired
 };
 
-function Login(props) {
-  if (props.visible) {
+class Login extends React.Component {
+  render() {
+    if (this.props.visible) {
+      return (
+        <div id="login">
+          <h1 className="cyan">Gamemaster
+            <small className="text-muted">Login to start a game</small>
+          </h1>
+          <p className="text-danger" id="error">There was an error during the authentication</p>
+          <button id="login-button" className="sbtn sbtn-green mb-1">Log in with Spotify</button>
+        </div>
+      );
+    }
     return null;
   }
-  return (
-    <div id="login">
-      <h1 className="cyan">Gamemaster
-        <small className="text-muted">Login to start a game</small>
-      </h1>
-      <p className="text-danger" id="error">There was an error during the authentication</p>
-      <button id="login-button" className="sbtn sbtn-green mb-1">Log in with Spotify</button>
-    </div>
-  );
 }
 
-function Create(props) {
-  if (props.visible) {
-    return null;
-  }
-  return (
-    <div id="create">
-      <div id="playlists">
-        <h1 className="cyan mb-3">Select collaborative playlist</h1>
-        <PlaylistTable />
-      </div>
-      <div className="container">
-        <div className="row">
-          <div className="col players">
+class Create extends React.Component {
+  render() {
+    if (this.props.visible) {
+      return (
+        <div id="create">
+          <div id="playlists">
+            <h1 className="cyan mb-3">Select collaborative playlist</h1>
+            <PlaylistTable />
           </div>
-          <div className="col col-lg-4">
-            <button className="sbtn sbtn-green mb-1 float-right" id="shuffle">
-              Shuffle
-            </button>
-            <span className="text-danger align-middle" id="error-shuffle">Failed to start shuffle</span>
+          <div className="container">
+            <div className="row">
+              <div className="col players">
+              </div>
+              <div className="col col-lg-4">
+                <button className="sbtn sbtn-green mb-1 float-right" id="shuffle">
+                  Shuffle
+                </button>
+                <span className="text-danger align-middle" style={{display: 'none'}} id="error-shuffle">Failed to start shuffle</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      );
+      }
+    return null;
+  }
 }
 
 class PlaylistTable extends React.Component {
