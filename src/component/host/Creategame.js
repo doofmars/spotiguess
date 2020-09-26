@@ -47,6 +47,21 @@ class Login extends React.Component {
 }
 
 class Create extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {warning: false};
+  }
+
+  static contextType = HostContext;
+
+  shuffleClick = () => {
+    if (this.context.state.selected === "") {
+      this.setState({warning: true});
+    } else {
+      console.log("done")
+    }
+  }
+
   render() {
     if (this.props.visible) {
       return (
@@ -60,10 +75,10 @@ class Create extends React.Component {
               <div className="col players">
               </div>
               <div className="col col-lg-4">
-                <button className="sbtn sbtn-green mb-1 float-right" id="shuffle">
+                <button className="sbtn sbtn-green mb-1 float-right" id="shuffle" onClick={this.shuffleClick}>
                   Shuffle
                 </button>
-                <span className="text-danger align-middle" style={{display: 'none'}} id="error-shuffle">Failed to start shuffle</span>
+                <span className="text-danger align-middle" style={this.state.warning ? null : {display: 'none'} } id="error-shuffle">Failed to start shuffle</span>
               </div>
             </div>
           </div>
