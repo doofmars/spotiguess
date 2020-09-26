@@ -9,11 +9,10 @@ const socket = openSocket('http://localhost:3000');
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.viewChangeEvent = this.viewChangeEvent.bind(this);
     this.state = {view: 'lobby'};
   }
 
-  viewChangeEvent(newView) {
+  viewChangeEvent = (newView) => {
     this.setState({view: newView});
   }
 
