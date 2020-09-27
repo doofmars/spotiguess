@@ -3,17 +3,38 @@ import './App.css';
 import openSocket from 'socket.io-client';
 import Lobby from'./Lobby.js'
 import Host from'./host/Host.js'
+import getHashParams from'./logic/hash.js'
 
 const socket = openSocket('http://localhost:3000');
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {view: 'lobby'};
+    this.state = {
+      hash: null,
+      view: 'lobby'
+    };
   }
 
   viewChangeEvent = (newView) => {
     this.setState({view: newView});
+  }
+
+  componentDidMount() {
+    // Set token
+    let _hash = getHashParams();
+    console.log(_hash)
+
+    if ('access_token' in _hash) {
+      // Set token
+      this.setState({
+        hash: _hash
+      });
+      this.setState({
+        view: "host"
+      });
+    }
+    }
   }
 
   render() {
@@ -22,7 +43,7 @@ export default class App extends React.Component {
     const gameState = this.state.view;
 
     if (gameState === 'host') {
-      view = <Host viewChangeEvent={this.viewChangeEvent} />
+      view = <Host viewChangeEvent={this.viewChangeEvent} hash={this.state.hash} />
     } else if (gameState === 'lobby') {
       view = <Lobby viewChangeEvent={this.viewChangeEvent} />
     }

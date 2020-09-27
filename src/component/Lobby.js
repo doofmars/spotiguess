@@ -3,6 +3,7 @@ import './Lobby.css';
 import {SlideDown} from 'react-slidedown'
 import 'react-slidedown/lib/slidedown.css'
 import PropTypes from 'prop-types';
+import login from "./logic/login";
 
 export default class Lobby extends React.Component {
 
@@ -18,13 +19,17 @@ export default class Lobby extends React.Component {
     }));
   }
 
+  createGameClick() {
+    login();
+  }
+
   render() {
     return (
       <div className="content-start">
         <div className="Lobby">
           <h1 className="cyan mb-3 block">Spotiguess</h1>
           <div id="gamestart">
-            <button className="sbtn sbtn-green mb-1 btn-block" id="login-button" type="button" onClick={this.props.viewChangeEvent.bind(this, 'host')}>
+            <button className="sbtn sbtn-green mb-1 btn-block" id="login-button" type="button" onClick={this.createGameClick}>
               Create new game
             </button>
             <p className="text-white mb-4">
