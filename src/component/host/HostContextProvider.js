@@ -7,6 +7,7 @@ class HostContextProvider extends React.Component {
     super(props);
     this.state = {
       room: props.room,
+      access_token: props.access_token,
       selected: ""
     };
   }

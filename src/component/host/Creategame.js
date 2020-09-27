@@ -1,20 +1,37 @@
 import React from 'react';
 import './Creategame.css';
+import axios from 'axios';
 import PropTypes from 'prop-types';
-import { playlists } from "./../../sample_pls.js";
 import Image from 'react-bootstrap/Image'
 import { HostContext } from './HostContextProvider.js'
 
 export default class Creategame extends React.Component {
+  static contextType = HostContext;
 
   constructor(props) {
     super(props);
     this.state = {
-      warning: false
+      warning: false,
+      playlists: {items:[]}
     };
   }
 
-  static contextType = HostContext;
+  componentDidMount() {
+    if (this.context.state.access_token !== undefined) {
+      axios.get('https://api.spotify.com/v1/me/playlists',
+        { headers: { 'Authorization': 'Bearer ' + this.context.state.access_token
+      }}).then(response => {
+        this.setState({
+          playlists: response.data
+        });
+      }).catch(error => {
+        console.log(error);
+        this.props.viewChangeEvent('error')
+      });
+    } else {
+      this.props.viewChangeEvent('error')
+    }
+  }
 
   shuffleClick = () => {
     if (this.context.state.selected === "") {
@@ -29,8 +46,8 @@ export default class Creategame extends React.Component {
       <div className="container">
         <div id="create">
           <div id="playlists">
-            <h1 className="cyan mb-3">Select collaborative playlist</h1>
-            <PlaylistTable />
+            <h1 className="cyan mb-3">Select a collaborative playlist</h1>
+            <PlaylistTable playlists={this.state.playlists} />
           </div>
           <div className="container">
             <div className="row">
@@ -42,6 +59,7 @@ export default class Creategame extends React.Component {
                 </button>
                 <span className="text-danger align-middle" style={this.state.warning ? null : {display: 'none'} } id="error-shuffle">Failed to start shuffle</span>
               </div>
+              <button onClick={this.props.viewChangeEvent.bind(this, 'error')}>test</button>
             </div>
           </div>
         </div>
@@ -49,6 +67,10 @@ export default class Creategame extends React.Component {
     );
   }
 }
+
+Creategame.propTypes = {
+  viewChangeEvent: PropTypes.func.isRequired
+};
 
 class PlaylistTable extends React.Component {
   render() {
@@ -65,7 +87,7 @@ class PlaylistTable extends React.Component {
           </tr>
         </thead>
         <tbody id="playlists">
-          { playlists.items.map((item, index) => {
+          { this.props.playlists.items.map((item, index) => {
             return (
               <PlaylistRow item={item} index={index} key={index} selectEvent={this.selectEvent} />
             );

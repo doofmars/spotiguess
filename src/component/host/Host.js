@@ -8,17 +8,21 @@ export default class Host extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {room: generateRoomCode()};
+    this.state = {
+      room: generateRoomCode()
+    };
   }
 
   render() {
     return (
-      <HostContextProvider room={this.state.room}>
+      <HostContextProvider
+          room={this.state.room}
+          access_token={this.props.hash.access_token} >
         <div className="corner-ribbon top-right sticky magenta">
           Room Code<br />
           <b id="room-code">{this.state.room}</b>
         </div>
-        <Creategame/>
+        <Creategame viewChangeEvent={this.props.viewChangeEvent}/>
       </HostContextProvider>
     );
   }
