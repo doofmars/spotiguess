@@ -1,6 +1,8 @@
 import React from 'react';
 import './Host.css';
 import Creategame from './Creategame.js'
+import Game from './Game.js'
+import Score from './Score.js'
 import generateRoomCode from './../logic/roomCode.js'
 import {HostContextProvider} from './HostContextProvider.js'
 
@@ -9,20 +11,41 @@ export default class Host extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      room: generateRoomCode()
+      gamePhase: "prepare",
+      roomcode: generateRoomCode()
     };
   }
 
+  startGame = () => {
+    this.setState({gamePhase: "running"});
+  }
+
+  finishGame = () => {
+    this.setState({gamePhase: "running"});
+  }
+
   render() {
+    let gameView;
+
+    const gamePhase = this.state.gamePhase;
+
+    if (gamePhase === "running") {
+      gameView = <Game viewChangeEvent={this.props.viewChangeEvent} finishGame={this.finishGame}/>
+    } else if (gamePhase === "score") {
+      gameView = <Score viewChangeEvent={this.props.viewChangeEvent} />
+    } else {
+      gameView = <Creategame viewChangeEvent={this.props.viewChangeEvent} startGame={this.startGame} />
+    }
+
     return (
       <HostContextProvider
-          room={this.state.room}
+          roomcode={this.state.room}
           access_token={this.props.hash.access_token} >
         <div className="corner-ribbon top-right sticky magenta">
           Room Code<br />
-          <b id="room-code">{this.state.room}</b>
+          <b id="room-code">{this.state.roomcode}</b>
         </div>
-        <Creategame viewChangeEvent={this.props.viewChangeEvent}/>
+        {gameView}
       </HostContextProvider>
     );
   }

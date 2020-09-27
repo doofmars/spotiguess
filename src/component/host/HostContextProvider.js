@@ -1,14 +1,22 @@
 import React from 'react';
 
-const HostContext = React.createContext();  //exporting context object
+const HostContext = React.createContext();
 
 class HostContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      room: props.room,
-      access_token: props.access_token,
-      selected: ""
+      roomcode: props.roomcode,         //the room code to join
+      access_token: props.access_token, //the spotify access token to make api requests
+      itemsId: 0,                       //Position in shuffled playlist items
+      round:0,                          //Current round
+      rounds:30,                        //number of rounds
+      roundEnd:30,                      //Current end round increased for continue playing
+      missingPreviewSkip: true,         //skip songs without preview
+      showVotes: true,                  //Instantly show if a player has voted
+      players: new Map(),               //key name, values: {score:num, currentVote:str}
+      selectedPlaylistId: "",           //Selected palaylist id
+      playlistItems: []
     };
   }
 
@@ -16,7 +24,7 @@ class HostContextProvider extends React.Component {
     return (
       <HostContext.Provider value={
       { state: this.state,
-        setSelected: (value) => this.setState({selected: value })
+        selectPlaylist: (value) => this.setState({selectedPlaylistId: value })
       }}>
         {this.props.children}
       </HostContext.Provider>
@@ -24,4 +32,5 @@ class HostContextProvider extends React.Component {
   }
 }
 
+//exporting context object
 export { HostContext, HostContextProvider };

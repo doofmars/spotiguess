@@ -3,6 +3,7 @@ import './Creategame.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image'
+import getPlaylist from './../logic/getPlaylist.js'
 import { HostContext } from './HostContextProvider.js'
 
 export default class Creategame extends React.Component {
@@ -26,18 +27,26 @@ export default class Creategame extends React.Component {
         });
       }).catch(error => {
         console.log(error);
-        this.props.viewChangeEvent('error')
+        this.props.viewChangeEvent('error');
       });
     } else {
-      this.props.viewChangeEvent('error')
+      this.props.viewChangeEvent('error');
     }
   }
 
   shuffleClick = () => {
-    if (this.context.state.selected === "") {
+    if (this.context.state.selectedPlaylistId === "") {
       this.setState({warning: true});
     } else {
-      console.log("done")
+      getPlaylist(
+        this.context.state.selectedPlaylistId,
+        this.context.state.access_token,
+        (playlist) => {
+          this.props.startGame();
+        },
+        () => {
+          this.props.viewChangeEvent('error');
+        });
     }
   }
 
@@ -55,11 +64,10 @@ export default class Creategame extends React.Component {
               </div>
               <div className="col col-lg-4">
                 <button className="sbtn sbtn-green mb-1 float-right" id="shuffle" onClick={this.shuffleClick}>
-                  Shuffle
+                  Shuffle Play
                 </button>
                 <span className="text-danger align-middle" style={this.state.warning ? null : {display: 'none'} } id="error-shuffle">Failed to start shuffle</span>
               </div>
-              <button onClick={this.props.viewChangeEvent.bind(this, 'error')}>test</button>
             </div>
           </div>
         </div>
@@ -69,7 +77,8 @@ export default class Creategame extends React.Component {
 }
 
 Creategame.propTypes = {
-  viewChangeEvent: PropTypes.func.isRequired
+  viewChangeEvent: PropTypes.func.isRequired,
+  startGame: PropTypes.func.isRequired
 };
 
 class PlaylistTable extends React.Component {
@@ -87,9 +96,9 @@ class PlaylistTable extends React.Component {
           </tr>
         </thead>
         <tbody id="playlists">
-          { this.props.playlists.items.map((item, index) => {
+          { this.props.playlists.items.map((playlist, index) => {
             return (
-              <PlaylistRow item={item} index={index} key={index} selectEvent={this.selectEvent} />
+              <PlaylistRow playlist={playlist} index={index} key={index} selectEvent={this.selectEvent} />
             );
           })}
         </tbody>
@@ -103,14 +112,14 @@ class PlaylistRow extends React.Component {
     return (
       <HostContext.Consumer>
         {(context) => (
-        <tr id={this.props.index} className={context.state.selected === this.props.index ? 'selected': null}>
+        <tr id={this.props.index} className={context.state.selectedPlaylistId === this.props.playlist.id ? 'selected': null}>
           <th scope="row">{this.props.index + 1}</th>
-          <td><Image width="150" height="150" thumbnail  src={this.props.item.images[0].url}/></td>
-          <td>{this.props.item.name}</td>
-          <td>{this.props.item.owner.display_name}</td>
-          <td>{this.props.item.tracks.total}</td>
+          <td><Image width="150" height="150" thumbnail  src={this.props.playlist.images[0].url}/></td>
+          <td>{this.props.playlist.name}</td>
+          <td>{this.props.playlist.owner.display_name}</td>
+          <td>{this.props.playlist.tracks.total}</td>
           <td>
-            <button className="sbtn sbtn-green" id={this.props.item.id} value={this.props.index} type="button" onClick={()=>{context.setSelected(this.props.index)}}>
+            <button className="sbtn sbtn-green" id={this.props.playlist.id} value={this.props.index} type="button" onClick={()=>{context.selectPlaylist(this.props.playlist.id)}}>
               Select
             </button>
           </td>
