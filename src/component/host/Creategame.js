@@ -10,46 +10,8 @@ export default class Creategame extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      room: props.room,
-      connected: true
+      warning: false
     };
-  }
-
-  render() {
-    return (
-     <div className="container">
-       <Login visible={!this.state.connected}/>
-       <Create visible={this.state.connected} />
-     </div>
-    );
-  }
-}
-
-Creategame.propTypes = {
-  room: PropTypes.string.isRequired
-};
-
-class Login extends React.Component {
-  render() {
-    if (this.props.visible) {
-      return (
-        <div id="login">
-          <h1 className="cyan">Gamemaster
-            <small className="text-muted">Login to start a game</small>
-          </h1>
-          <p className="text-danger" id="error">There was an error during the authentication</p>
-          <button id="login-button" className="sbtn sbtn-green mb-1">Log in with Spotify</button>
-        </div>
-      );
-    }
-    return null;
-  }
-}
-
-class Create extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {warning: false};
   }
 
   static contextType = HostContext;
@@ -63,8 +25,8 @@ class Create extends React.Component {
   }
 
   render() {
-    if (this.props.visible) {
-      return (
+    return (
+      <div className="container">
         <div id="create">
           <div id="playlists">
             <h1 className="cyan mb-3">Select collaborative playlist</h1>
@@ -83,9 +45,8 @@ class Create extends React.Component {
             </div>
           </div>
         </div>
-      );
-      }
-    return null;
+      </div>
+    );
   }
 }
 

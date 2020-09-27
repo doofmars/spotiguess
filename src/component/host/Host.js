@@ -1,6 +1,7 @@
 import React from 'react';
 import './Host.css';
 import Creategame from './Creategame.js'
+import generateRoomCode from './../logic/roomCode.js'
 import {HostContextProvider} from './HostContextProvider.js'
 
 export default class Host extends React.Component {
@@ -12,27 +13,13 @@ export default class Host extends React.Component {
 
   render() {
     return (
-      <HostContextProvider>
+      <HostContextProvider room={this.state.room}>
         <div className="corner-ribbon top-right sticky magenta">
           Room Code<br />
           <b id="room-code">{this.state.room}</b>
         </div>
-        <Creategame room={this.state.room} />
+        <Creategame/>
       </HostContextProvider>
     );
   }
-}
-
-/**
- * Generates a room code string containing only uppercase letters
- * @return {string} The generated string
- */
-function generateRoomCode() {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-  for (var i = 0; i < 5; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
 }
