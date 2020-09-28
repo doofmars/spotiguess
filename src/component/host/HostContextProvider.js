@@ -1,4 +1,5 @@
 import React from 'react';
+import { playlist } from './../../sample_pls.js'
 
 const HostContext = React.createContext();
 
@@ -16,7 +17,7 @@ class HostContextProvider extends React.Component {
       showVotes: true,                  //Instantly show if a player has voted
       players: new Map(),               //key name, values: {score:num, currentVote:str}
       selectedPlaylistId: "",           //Selected palaylist id
-      playlistItems: []
+      playlistItems: playlist
     };
   }
 

@@ -4,14 +4,14 @@ import Creategame from './Creategame.js'
 import Game from './Game.js'
 import Score from './Score.js'
 import generateRoomCode from './../logic/roomCode.js'
-import {HostContextProvider} from './HostContextProvider.js'
+import {HostContextProvider, HostContext} from './HostContextProvider.js'
 
 export default class Host extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      gamePhase: "prepare",
+      gamePhase: "running",
       roomcode: generateRoomCode()
     };
   }
@@ -21,7 +21,7 @@ export default class Host extends React.Component {
   }
 
   finishGame = () => {
-    this.setState({gamePhase: "running"});
+    this.setState({gamePhase: "finished"});
   }
 
   render() {
@@ -31,7 +31,7 @@ export default class Host extends React.Component {
 
     if (gamePhase === "running") {
       gameView = <Game viewChangeEvent={this.props.viewChangeEvent} finishGame={this.finishGame}/>
-    } else if (gamePhase === "score") {
+    } else if (gamePhase === "finished") {
       gameView = <Score viewChangeEvent={this.props.viewChangeEvent} />
     } else {
       gameView = <Creategame viewChangeEvent={this.props.viewChangeEvent} startGame={this.startGame} />
