@@ -17,6 +17,7 @@ class HostContextProvider extends React.Component {
       showVotes: true,                  //Instantly show if a player has voted
       players: new Map(),               //key name, values: {score:num, currentVote:str}
       selectedPlaylistId: "",           //Selected palaylist id
+      volume: 0.2,                      //Sound voulme
       playlistItems: playlist
     };
   }
