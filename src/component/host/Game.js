@@ -25,10 +25,15 @@ export default class Game extends React.Component {
 
   componentDidMount() {
     this.timer = setInterval(() => {
+      this.context.nextRound();
+      if (this.context.state.round >= this.context.state.roundEnd) {
+        this.props.finishGame();
+      }
       let itemsId = nextSong(
         this.context.state.playlistItems,
         this.state.itemsId + 1,
         this.context.state.missingPreviewSkip);
+
       this.setState({
         itemsId: itemsId,
         songData: this.context.state.playlistItems[itemsId],
@@ -47,12 +52,12 @@ export default class Game extends React.Component {
     return (
       <div className="game container">
         <Song songData={this.state.songData} />
-        <div class="container">
-          <div class="row">
-            <div class="col play players">
+        <div className="container">
+          <div className="row">
+            <div className="col play players">
             </div>
-            <div class="col-sm">
-              <button class="sbtn sbtn-green mb-1 float-right" id="next">
+            <div className="col-sm">
+              <button className="sbtn sbtn-green mb-1 float-right" id="next">
                 Next
               </button>
             </div>

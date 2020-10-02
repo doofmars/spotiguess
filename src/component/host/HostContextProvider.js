@@ -22,11 +22,17 @@ class HostContextProvider extends React.Component {
     };
   }
 
+  nextRound = () => {
+    console.log("nextRound");
+    this.setState({round: this.state.round + 1});
+  }
+
   render() {
     return (
       <HostContext.Provider value={
       { state: this.state,
-        selectPlaylist: (value) => this.setState({selectedPlaylistId: value })
+        selectPlaylist: (value) => this.setState({selectedPlaylistId: value }),
+        nextRound: this.nextRound
       }}>
         {this.props.children}
       </HostContext.Provider>

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Song.css';
 import artistList from './../logic/artistList.js';
 import { HostContext } from './HostContextProvider.js'
@@ -89,3 +90,8 @@ export default class Song extends React.Component {
     );
   }
 }
+
+Song.propTypes = {
+  songData: PropTypes.object.isRequired
+};
+
