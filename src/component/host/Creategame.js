@@ -4,6 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image'
 import getPlaylist from './../logic/getPlaylist.js'
+import JoinedPlayer from './JoinedPlayer.js'
 import { HostContext } from './HostContextProvider.js'
 
 export default class Creategame extends React.Component {
@@ -52,6 +53,16 @@ export default class Creategame extends React.Component {
   }
 
   render() {
+    const joinedPlayer = [];
+
+    if (this.context.state.players.size === 0) {
+        joinedPlayer.push(<JoinedPlayer name={"No one has joined yet"}/>)
+    } else {
+      this.context.state.players.forEach((value, key) => {
+        joinedPlayer.push(<JoinedPlayer name={key}/>)
+      });
+    }
+
     return (
       <div className="container">
         <div id="create">
@@ -62,6 +73,7 @@ export default class Creategame extends React.Component {
           <div className="container">
             <div className="row">
               <div className="col players">
+                {joinedPlayer}
               </div>
               <div className="col col-lg-4">
                 <button className="sbtn sbtn-green mb-1 float-right" id="shuffle" onClick={this.shuffleClick}>
@@ -130,4 +142,3 @@ class PlaylistRow extends React.Component {
     );
   }
 }
-
