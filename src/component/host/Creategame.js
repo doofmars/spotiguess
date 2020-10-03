@@ -27,10 +27,10 @@ export default class Creategame extends React.Component {
         });
       }).catch(error => {
         console.log(error);
-        this.props.viewChangeEvent('error');
+        this.props.viewChangeEvent('error', 'Could not get playlists from Spotify');
       });
     } else {
-      this.props.viewChangeEvent('error');
+      this.props.viewChangeEvent('error', 'Missing access token please login again');
     }
   }
 
@@ -42,10 +42,11 @@ export default class Creategame extends React.Component {
         this.context.state.selectedPlaylistId,
         this.context.state.access_token,
         (playlist) => {
+          this.context.setPlaylist(playlist)
           this.props.startGame();
         },
         () => {
-          this.props.viewChangeEvent('error');
+          this.props.viewChangeEvent('error', 'Could not select playlist');
         });
     }
   }

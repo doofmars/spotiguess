@@ -11,11 +11,11 @@ export default class Game extends React.Component {
   constructor(props, context) {
     super(props);
     if (context.state.playlistItems.length === 0) {
-      this.props.viewChangeEvent('error');
+      this.props.viewChangeEvent('error', 'The selected playlst has no tracks');
     }
     let itemsId = nextSong(context.state.playlistItems, 0, context.state.missingPreviewSkip);
     if (itemsId < 0) {
-      this.props.viewChangeEvent('error');
+      this.props.viewChangeEvent('error', 'The selected playlst has suitable tracks to your configuration');
     }
     this.state = {
       itemsId: itemsId,

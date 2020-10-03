@@ -13,12 +13,18 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       hash: null,
-      view: 'lobby'
+      view: 'lobby',
+      message: '',
     };
   }
 
-  viewChangeEvent = (newView) => {
-    this.setState({view: newView});
+  viewChangeEvent = (newView, message) => {
+    if (message) {
+      console.log(message);
+      this.setState({view: newView, message: message});
+    } else {
+      this.setState({view: newView, message: ''});
+    }
   }
 
   componentDidMount() {
@@ -51,7 +57,7 @@ export default class App extends React.Component {
     } else if (gameState === 'lobby') {
       view = <Lobby viewChangeEvent={this.viewChangeEvent} />
     } else if (gameState === 'error') {
-      view = <LoginError viewChangeEvent={this.viewChangeEvent} />
+      view = <LoginError viewChangeEvent={this.viewChangeEvent} message={this.state.message} />
     }
 
     return (

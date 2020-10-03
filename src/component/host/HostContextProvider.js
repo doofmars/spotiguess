@@ -1,5 +1,4 @@
 import React from 'react';
-import { playlist } from './../../sample_pls.js'
 
 const HostContext = React.createContext();
 
@@ -18,7 +17,7 @@ class HostContextProvider extends React.Component {
       players: new Map(),               //key name, values: {score:num, currentVote:str}
       selectedPlaylistId: "",           //Selected palaylist id
       volume: 0.2,                      //Sound voulme
-      playlistItems: playlist
+      playlistItems: []
     };
   }
 
@@ -32,7 +31,8 @@ class HostContextProvider extends React.Component {
       <HostContext.Provider value={
       { state: this.state,
         selectPlaylist: (value) => this.setState({selectedPlaylistId: value }),
-        nextRound: this.nextRound
+        nextRound: this.nextRound,
+        setPlaylist: (playlist) => this.setState({playlistItems: playlist})
       }}>
         {this.props.children}
       </HostContext.Provider>
