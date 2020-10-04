@@ -16,7 +16,8 @@ export default class Voting extends React.Component {
       roomcode: this.props.roomcode,
       info: "Wait until the host has started the game or the next round is started.",
       options: [],
-      selectedOption: ''
+      selectedOption: '',
+      voteTime: new Date().getTime()
     };
   }
 
@@ -26,7 +27,10 @@ export default class Voting extends React.Component {
   }
 
   onRoundStarted = (roundInfo) => {
-    this.setState({selectedOption: '', info: roundInfo.title + ' - ' + roundInfo.artist})
+    this.setState({
+      selectedOption: '',
+      voteTime: roundInfo.votetime,
+      info: roundInfo.title + ' - ' + roundInfo.artist})
   }
 
   onOptionsReceived = (options) => {
@@ -34,13 +38,14 @@ export default class Voting extends React.Component {
   }
 
   onOptionSelect = (e) => {
-    socket.emit('vote',
-    {
-      name:this.state.name,
-      roomcode:this.state.roomcode,
-      option:e.target.value
-    });
-    this.setState({selectedOption: e.target.value})
+    if (new Date().getTime() < this.state.voteTime) {
+      socket.emit('vote', {
+        name:this.state.name,
+        roomcode:this.state.roomcode,
+        option:e.target.value
+      });
+      this.setState({selectedOption: e.target.value})
+    }
   }
 
   render() {
