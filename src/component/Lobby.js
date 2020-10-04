@@ -1,11 +1,13 @@
 import React from 'react';
 import './Lobby.css';
-import {SlideDown} from 'react-slidedown'
-import 'react-slidedown/lib/slidedown.css'
 import PropTypes from 'prop-types';
 import login from "./logic/login";
+import LoginInfo from "./LoginInfo";
 
 export default class Lobby extends React.Component {
+  static propTypes = {
+    votingViewChange: PropTypes.func.isRequired
+  }
 
   constructor(props) {
     super(props);
@@ -42,7 +44,7 @@ export default class Lobby extends React.Component {
             <p className="text-white">
               Join an active session
             </p>
-            <LoginInfo hidden={this.state.loginInfoHidden} />
+            <LoginInfo hidden={this.state.loginInfoHidden} votingViewChange={this.props.votingViewChange} />
           </div>
         </div>
       </div>
@@ -50,6 +52,3 @@ export default class Lobby extends React.Component {
   }
 }
 
-Lobby.propTypes = {
-  viewChangeEvent: PropTypes.func.isRequired
-};

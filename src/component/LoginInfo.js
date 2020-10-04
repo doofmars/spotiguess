@@ -1,9 +1,15 @@
 import React from 'react';
 import './LoginInfo.css';
+import PropTypes from 'prop-types';
 import 'react-slidedown/lib/slidedown.css'
 import {SlideDown} from 'react-slidedown'
+import joinGame from "./logic/joinGame";
 
 export default class LoginInfo extends React.Component {
+  static propTypes = {
+    votingViewChange: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +25,7 @@ export default class LoginInfo extends React.Component {
   }
 
   join = () => {
+    let roomcode = this.state.roomcode.toUpperCase();
     if (! /^[a-z][-a-z _0-9]{0,15}$/i.test(this.state.name)) {
       this.setState({
         warning_visible: true,
@@ -26,7 +33,7 @@ export default class LoginInfo extends React.Component {
       });
       return;
     }
-    if (! /^[A-Z]{5}$/.test(this.state.roomcode)) {
+    if (! /^[A-Z]{5}$/.test(roomcode)) {
       this.setState({
         warning_visible: true,
         warning: 'Bad code, must be 5 characters'
@@ -36,6 +43,7 @@ export default class LoginInfo extends React.Component {
     this.setState({
       warning_visible: false,
     });
+    joinGame(this.state.name, roomcode, this.props.votingViewChange)
   }
 
   render() {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default function getPlaylist(id, access_token, successHandler, errorHandler) {
-  var playlist = getPlaylistRecursive([], 0, id, access_token, successHandler, errorHandler)
+  getPlaylistRecursive([], 0, id, access_token, successHandler, errorHandler)
 }
 
 /**

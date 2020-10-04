@@ -1,12 +1,10 @@
 import React from 'react';
 import './App.css';
-import openSocket from 'socket.io-client';
 import Lobby from'./Lobby.js'
 import Host from'./host/Host.js'
 import LoginError from'./host/LoginError.js'
+import Voting from'./player/Voting.js'
 import getHashParams from'./logic/hash.js'
-
-const socket = openSocket('http://localhost:3000');
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,6 +23,10 @@ export default class App extends React.Component {
     } else {
       this.setState({view: newView, message: ''});
     }
+  }
+
+  votingViewChange = (name, roomcode) => {
+    this.setState({view: "vote", name: name, roomcode: roomcode});
   }
 
   componentDidMount() {
@@ -55,9 +57,11 @@ export default class App extends React.Component {
     if (gameState === 'host') {
       view = <Host viewChangeEvent={this.viewChangeEvent} hash={this.state.hash} />
     } else if (gameState === 'lobby') {
-      view = <Lobby viewChangeEvent={this.viewChangeEvent} />
+      view = <Lobby votingViewChange={this.votingViewChange} />
     } else if (gameState === 'error') {
       view = <LoginError viewChangeEvent={this.viewChangeEvent} message={this.state.message} />
+    } else if (gameState === 'vote') {
+      view = <Voting name={this.state.name} roomcode={this.state.roomcode} />
     }
 
     return (
