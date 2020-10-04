@@ -53,18 +53,3 @@ export default class Lobby extends React.Component {
 Lobby.propTypes = {
   viewChangeEvent: PropTypes.func.isRequired
 };
-
-function LoginInfo(props) {
-  return (
-    <SlideDown className={'my-dropdown-slidedown'} closed={props.hidden}>
-      <div id="join-info">
-        <input id="name" type="text" className="form-control mb-1" placeholder="Name" />
-        <input id="room-code" type="text" className="form-control mb-1" maxLength="5" placeholder="Roomkey" />
-        <button className="sbtn sbtn-green mb-1 float-right" id="join-accept" type="button">
-          Join
-        </button>
-        <p id="bad-message" className="text-danger"></p>
-      </div>
-    </SlideDown>
-  )
-}
