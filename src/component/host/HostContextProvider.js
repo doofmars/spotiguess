@@ -15,8 +15,8 @@ class HostContextProvider extends React.Component {
       missingPreviewSkip: true,         //skip songs without preview
       showVotes: true,                  //Instantly show if a player has voted
       players: new Map(),               //key name, values: {score:num, currentVote:str}
-      selectedPlaylistId: "",           //Selected palaylist id
-      volume: 0.2,                      //Sound voulme
+      selectedPlaylistId: "",           //Selected playlist id
+      volume: 0.2,                      //Sound volume
       playlistItems: []
     };
   }
@@ -30,7 +30,7 @@ class HostContextProvider extends React.Component {
     if (this.state.players.get(player)) {
       let score = this.state.players.get(player).score
       this.setState({
-        players: new Map([... this.state.players, [player, {score: score, currentVote:vote}]])
+        players: new Map([...this.state.players, [player, {score: score, currentVote:vote}]])
       })
     }
   }
@@ -40,7 +40,7 @@ class HostContextProvider extends React.Component {
       let score = this.state.players.get(player).score
       let vote = this.state.players.get(player).currentVote
       this.setState({
-        players: new Map([... this.state.players, [player, {score: score + 1, currentVote:vote}]])
+        players: new Map([...this.state.players, [player, {score: score + 1, currentVote:vote}]])
       })
     }
   }

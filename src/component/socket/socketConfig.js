@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
 
-const socket = openSocket("http://localhost:3000");
+const socket = openSocket("https://spotiguess.herokuapp.com/");
 
 export default socket;
