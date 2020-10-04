@@ -14,18 +14,38 @@ export default class Voting extends React.Component {
     this.state = {
       name: this.props.name,
       roomcode: this.props.roomcode,
-      options: []
+      info: "Wait until the host has started the game or the next round is started.",
+      options: [],
+      selectedOption: ''
     };
   }
 
   componentDidMount() {
+    socket.on('options', this.onOptionsReceived);
+  }
 
+  onOptionsReceived = (options) => {
+    this.setState({options: options})
+  }
+
+  onOptionSelect = (e) => {
+    this.setState({selectedOption: e.target.value})
   }
 
   render() {
     return (
-      <div className="Voting">
-        <p>{this.state.name} - {this.state.roomcode}</p>
+      <div className="voting">
+        <h1 className="cyan mb-3 block">Spotiguess</h1>
+        <p className="text-white" id="waiting">{this.state.info}</p>
+        { this.state.options.map((option) => {
+          let btnClass = "sbtn mb-1 btn-block option"
+          return(
+            <button className={this.state.selectedOption === option ? btnClass + " sbtn-white" : btnClass + " sbtn-green"} key={option} value={option}
+              onClick={(value) => this.onOptionSelect(value)}>
+              {option}
+            </button>
+          );
+        })}
       </div>
     );
   }
