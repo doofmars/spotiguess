@@ -38,7 +38,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Setup:
 
-The frontend is developped with react the backend uses socket io for client to client communication.
+The frontend is developed with react the backend uses socket io for client to client communication.
 Run server.js for nodejs server + express for frontend delivery
 `node server`
 The server will listen on port 3000
