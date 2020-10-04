@@ -57,7 +57,7 @@ io.on('connection', function(socket){
     socket.to(msg.roomcode + '_host').emit('vote', msg);
   });
 
-  // msg: {roomcode:str, artist:str, title:str, votetime:num}
+  // msg: {roomcode:str, artist:str, title:str, voteTime:num}
   socket.on('next-song', function(msg){
     console.log('next-song: ' + JSON.stringify(msg));
     socket.to(msg.roomcode).emit('next-song', msg);

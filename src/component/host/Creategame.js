@@ -6,9 +6,14 @@ import Image from 'react-bootstrap/Image'
 import getPlaylist from '../api/getPlaylist.js'
 import JoinedPlayer from './JoinedPlayer.js'
 import { HostContext } from './HostContextProvider.js'
+import socket from "../socket/socketConfig";
 
-export default class Creategame extends React.Component {
+export default class CreateGame extends React.Component {
   static contextType = HostContext;
+  static propTypes = {
+    viewChangeEvent: PropTypes.func.isRequired,
+    startGame: PropTypes.func.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -88,11 +93,6 @@ export default class Creategame extends React.Component {
     );
   }
 }
-
-Creategame.propTypes = {
-  viewChangeEvent: PropTypes.func.isRequired,
-  startGame: PropTypes.func.isRequired
-};
 
 class PlaylistTable extends React.Component {
   render() {

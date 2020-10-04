@@ -29,7 +29,7 @@ export default class Voting extends React.Component {
   onRoundStarted = (roundInfo) => {
     this.setState({
       selectedOption: '',
-      voteTime: roundInfo.votetime,
+      voteTime: roundInfo.voteTime,
       info: roundInfo.title + ' - ' + roundInfo.artist})
   }
 

@@ -58,7 +58,7 @@ export default class LoginInfo extends React.Component {
           <input id="name" name="name" maxLength="15" type="text" className="form-control mb-1" placeholder="Name"
             onChange={(value) => this.onChange(value)} value={this.state.name} />
           <input id="roomcode" name="roomcode" type="text" className="form-control mb-1"
-            maxLength="5" placeholder="Roomkey" style={{'textTransform': 'uppercase'}}
+            maxLength="5" placeholder="roomcode" style={{'textTransform': 'uppercase'}}
             onChange={(value) => this.onChange(value)} value={this.state.roomcode} />
           <button className="sbtn sbtn-green mb-1 float-right" id="join-accept" type="button"
             onClick={this.join}>

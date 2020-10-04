@@ -7,6 +7,10 @@ import nextSong from './../logic/nextSong.js'
 
 export default class Game extends React.Component {
   static contextType = HostContext;
+  static propTypes = {
+    viewChangeEvent: PropTypes.func.isRequired,
+    finishGame: PropTypes.func.isRequired
+  }
 
   constructor(props, context) {
     super(props);
@@ -67,8 +71,3 @@ export default class Game extends React.Component {
     );
   }
 }
-
-Game.propTypes = {
-  viewChangeEvent: PropTypes.func.isRequired,
-  finishGame: PropTypes.func.isRequired
-};

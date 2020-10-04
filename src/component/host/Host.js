@@ -28,9 +28,11 @@ export default class Host extends React.Component {
 
   componentDidMount() {
     socket.emit('room-code', this.state.roomcode);
-    socket.on('reconnect', function() {
-        socket.emit('room-code-reconnect', this.state.roomcode);
-    });
+    socket.on('reconnect', this.onReconnect);
+  }
+
+  onReconnect = () => {
+    socket.emit('room-code-reconnect', this.state.roomcode);
   }
 
   render() {
@@ -48,7 +50,7 @@ export default class Host extends React.Component {
 
     return (
       <HostContextProvider
-          roomcode={this.state.room}
+          roomcode={this.state.roomcode}
           access_token={this.props.hash.access_token} >
         <div className="corner-ribbon top-right sticky magenta">
           Room Code<br />

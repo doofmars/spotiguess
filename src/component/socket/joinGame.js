@@ -10,9 +10,7 @@ import socket from "./socketConfig";
 export default function joinGame(name, roomcode, callback) {
   socket.emit('request-join', {
     name:name,
-    roomcode:roomcode,
-    options:false,
-    votetime:new Date()
+    roomcode:roomcode
   });
   socket.on('join-accepted', function(msg){
     if (msg === name) {
