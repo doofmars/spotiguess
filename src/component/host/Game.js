@@ -38,6 +38,7 @@ export default class Game extends React.Component {
 
   componentDidMount() {
     this.timer = setInterval(() => {
+      this.context.countVotes(this.state.songData.added_by.id)
       this.setState(this.nextTrack());
     }, 30_000);
     socket.on('request-join', this.joinRequest);
@@ -46,8 +47,9 @@ export default class Game extends React.Component {
 
   nextTrack = () => {
     this.context.nextRound();
-    if (this.context.state.round >= this.context.state.roundEnd) {
+    if (this.context.state.round > this.context.state.roundEnd) {
       this.props.finishGame();
+      return;
     }
     let itemsId = getNextTrack(
       this.context.state.playlistItems,
@@ -94,8 +96,12 @@ export default class Game extends React.Component {
   }
 
   vote = (msg) => {
-    console.log('Got player ' + msg.name + " voted for:" + msg.option);
-    this.context.setVote(msg.name, msg.option)
+    if (new Date().getTime() < this.state.voteTime) {
+      console.log('Got player ' + msg.name + " voted for:" + msg.option);
+      this.context.setVote(msg.name, msg.option)
+    } else {
+      console.log('Player voted to late: ' + msg.name + " voted for:" + msg.option)
+    }
   }
 
   componentWillUnmount() {
