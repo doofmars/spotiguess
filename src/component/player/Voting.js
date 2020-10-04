@@ -22,6 +22,11 @@ export default class Voting extends React.Component {
 
   componentDidMount() {
     socket.on('options', this.onOptionsReceived);
+    socket.on('next-song', this.onRoundStarted)
+  }
+
+  onRoundStarted = (roundInfo) => {
+    this.setState({selectedOption: '', info: roundInfo.title + ' - ' + roundInfo.artist})
   }
 
   onOptionsReceived = (options) => {
@@ -29,6 +34,12 @@ export default class Voting extends React.Component {
   }
 
   onOptionSelect = (e) => {
+    socket.emit('vote',
+    {
+      name:this.state.name,
+      roomcode:this.state.roomcode,
+      option:e.target.value
+    });
     this.setState({selectedOption: e.target.value})
   }
 
