@@ -1,4 +1,4 @@
-import socket from "../api/socketConfig";
+import socket from "./socketConfig";
 
 /**
  * Join a given game, only call callback if join was accepted.

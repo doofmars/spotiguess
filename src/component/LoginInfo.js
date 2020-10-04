@@ -3,7 +3,7 @@ import './LoginInfo.css';
 import PropTypes from 'prop-types';
 import 'react-slidedown/lib/slidedown.css'
 import {SlideDown} from 'react-slidedown'
-import joinGame from "./logic/joinGame";
+import joinGame from "./socket/joinGame";
 
 export default class LoginInfo extends React.Component {
   static propTypes = {
@@ -16,7 +16,7 @@ export default class LoginInfo extends React.Component {
       warning: '',
       warning_visible: false,
       name: '',
-      roomcode: 'XSVRX'
+      roomcode: ''
     };
   }
 

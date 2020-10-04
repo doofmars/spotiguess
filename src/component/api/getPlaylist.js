@@ -1,11 +1,26 @@
 import axios from 'axios';
 
+/**
+ * Get all playlist items
+ *
+ * @param {String} id Playlist ID
+ * @param {String} access_token Spotify access token
+ * @param {Function} successHandler Callback when all tracks are received
+ * @param {Function} errorHandler Callback when some error occurs
+ */
 export default function getPlaylist(id, access_token, successHandler, errorHandler) {
   getPlaylistRecursive([], 0, id, access_token, successHandler, errorHandler)
 }
 
 /**
- * Recursivly get all playlist items if playlist has more than 100 items of spotify api limit
+ * Recursively get all playlist items if playlist has more than 100 items of Spotify api limit
+ *
+ * @param {Array} items Collected track list used for recursion
+ * @param {Integer} offset current offset
+ * @param {String} id Playlist ID
+ * @param {String} access_token Spotify access token
+ * @param {Function} successHandler Callback when all tracks are received
+ * @param {Function} errorHandler Callback when some error occurs
  */
 function getPlaylistRecursive(items, offset, id, access_token, successHandler, errorHandler) {
   axios.get('https://api.spotify.com/v1/playlists/'+id+'/tracks?offset=' + offset,

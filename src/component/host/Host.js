@@ -1,12 +1,14 @@
 import React from 'react';
 import './Host.css';
-import Creategame from './Creategame.js'
+import CreateGame from './CreateGame.js'
 import Game from './Game.js'
 import Score from './Score.js'
 import generateRoomCode from './../logic/roomCode.js'
 import {HostContextProvider, HostContext} from './HostContextProvider.js'
+import socket from "../socket/socketConfig";
 
 export default class Host extends React.Component {
+  static contextType = HostContext;
 
   constructor(props) {
     super(props);
@@ -24,6 +26,13 @@ export default class Host extends React.Component {
     this.setState({gamePhase: "finished"});
   }
 
+  componentDidMount() {
+    socket.emit('room-code', this.state.roomcode);
+    socket.on('reconnect', function() {
+        socket.emit('room-code-reconnect', this.state.roomcode);
+    });
+  }
+
   render() {
     let gameView;
 
@@ -34,7 +43,7 @@ export default class Host extends React.Component {
     } else if (gamePhase === "finished") {
       gameView = <Score viewChangeEvent={this.props.viewChangeEvent} />
     } else {
-      gameView = <Creategame viewChangeEvent={this.props.viewChangeEvent} startGame={this.startGame} />
+      gameView = <CreateGame viewChangeEvent={this.props.viewChangeEvent} startGame={this.startGame} />
     }
 
     return (

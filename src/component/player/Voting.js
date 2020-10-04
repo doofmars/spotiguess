@@ -1,7 +1,7 @@
 import React from 'react';
 import './Voting.css';
 import PropTypes from 'prop-types';
-import socket from "../api/socketConfig";
+import socket from "../socket/socketConfig";
 
 export default class Voting extends React.Component {
   static propTypes = {
@@ -16,6 +16,10 @@ export default class Voting extends React.Component {
       roomcode: this.props.roomcode,
       options: []
     };
+  }
+
+  componentDidMount() {
+
   }
 
   render() {

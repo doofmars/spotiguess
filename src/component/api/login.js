@@ -1,3 +1,6 @@
+/**
+ * Login to spotify using implicit grant oauth flow
+ */
 export default function login() {
   var client_id = '10bc80659da04939b8ff8b6014793016'; // Your client id
   var redirect_uri = window.location.href; // Your redirect uri
@@ -20,7 +23,11 @@ export default function login() {
 }
 
 var stateKey = 'spotify_auth_state';
-
+/**
+ * Helper to generate a random string for API access
+ *
+ * @param {String} length length of string
+ */
 function generateRandomString(length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

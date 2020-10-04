@@ -1,9 +1,9 @@
 import React from 'react';
-import './Creategame.css';
+import './CreateGame.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image'
-import getPlaylist from './../logic/getPlaylist.js'
+import getPlaylist from '../api/getPlaylist.js'
 import JoinedPlayer from './JoinedPlayer.js'
 import { HostContext } from './HostContextProvider.js'
 

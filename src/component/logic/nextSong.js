@@ -1,5 +1,5 @@
   /**
-   * Helper to retieve an item
+   * Helper to retrieve an item
    *
    * @params get the next item from the items list
    * @return an item or null if no more items in list

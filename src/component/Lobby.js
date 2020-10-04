@@ -1,7 +1,7 @@
 import React from 'react';
 import './Lobby.css';
 import PropTypes from 'prop-types';
-import login from "./logic/login";
+import login from "./api/login";
 import LoginInfo from "./LoginInfo";
 
 export default class Lobby extends React.Component {

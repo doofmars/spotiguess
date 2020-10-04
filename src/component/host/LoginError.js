@@ -1,5 +1,5 @@
 import React from 'react';
-import login from "./../logic/login";
+import login from "../api/login";
 
 
 export default class LoginError extends React.Component {
