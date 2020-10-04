@@ -39,7 +39,10 @@ export default class Game extends React.Component {
   componentDidMount() {
     this.timer = setInterval(() => {
       this.context.countVotes(this.state.songData.added_by.id)
-      this.setState(this.nextTrack());
+      let newState = this.nextTrack();
+      if (newState !== undefined) {
+        this.setState(newState);
+      }
     }, 30_000);
     socket.on('request-join', this.joinRequest);
     socket.on('vote', this.vote)
@@ -48,13 +51,17 @@ export default class Game extends React.Component {
   nextTrack = () => {
     this.context.nextRound();
     if (this.context.state.round > this.context.state.roundEnd) {
-      this.props.finishGame();
+      this.props.finishGame(this.context.state.players, true);
       return;
     }
     let itemsId = getNextTrack(
       this.context.state.playlistItems,
       this.state.itemsId,
       this.context.state.missingPreviewSkip);
+    if (itemsId < 0) {
+      this.props.finishGame(this.context.state.players, false);
+      return;
+    }
     let date = new Date();
     date.setSeconds(date.getSeconds() + COUNTDOWN);
     let now = date.getTime();
