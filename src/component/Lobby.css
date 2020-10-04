@@ -1,0 +1,37 @@
+.content {
+  width: 100%;
+  max-width: 650px;
+  margin: auto;
+}
+
+.content-start {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+/* The colors */
+.cyan {
+  color: #cdf658;
+}
+
+.olive {
+  color: #48917d;
+}
+
+.white {
+  color: #ffffff;
+}
+
+.magenta {
+  color: #f22fa5;
+}
+
+.bg-black {
+  background-color: #000;
+}
