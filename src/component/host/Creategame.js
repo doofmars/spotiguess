@@ -38,6 +38,7 @@ export default class CreateGame extends React.Component {
     } else {
       this.props.viewChangeEvent('error', 'Missing access token please login again');
     }
+    socket.on('request-join', this.joinRequest);
   }
 
   shuffleClick = () => {
@@ -57,6 +58,20 @@ export default class CreateGame extends React.Component {
     }
   }
 
+  joinRequest = (msg) => {
+    socket.emit('join-accepted', msg);
+    if (this.context.state.players.get(msg.name)) {
+      console.log('A Player Rejoined: ' + msg.name);
+    } else {
+      console.log('A Player Joined: ' + msg.name);
+      this.context.addPlayer(msg.name)
+    }
+  }
+
+  componentWillUnmount() {
+    socket.off('request-join');
+  }
+
   render() {
     const joinedPlayer = [];
 
@@ -64,7 +79,7 @@ export default class CreateGame extends React.Component {
         joinedPlayer.push(<JoinedPlayer name={"No one has joined yet"}/>)
     } else {
       this.context.state.players.forEach((value, key) => {
-        joinedPlayer.push(<JoinedPlayer name={key}/>)
+        joinedPlayer.push(<JoinedPlayer name={key} key={key}/>)
       });
     }
 

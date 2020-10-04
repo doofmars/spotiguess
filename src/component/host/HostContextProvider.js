@@ -26,13 +26,35 @@ class HostContextProvider extends React.Component {
     this.setState({round: this.state.round + 1});
   }
 
+  setVote = (player, vote) => {
+    if (this.state.players.get(player)) {
+      let score = this.state.players.get(player).score
+      this.setState({
+        players: new Map([... this.state.players, [player, {score: score, currentVote:vote}]])
+      })
+    }
+  }
+
+  addScore = (player) => {
+    let score = this.state.players.get(player).score
+    let vote = this.state.players.get(player).vote
+    this.setState({
+      players: new Map([... this.state.players, [player, {score: score + 1, currentVote:vote}]])
+    })
+  }
+
   render() {
     return (
       <HostContext.Provider value={
       { state: this.state,
         selectPlaylist: (value) => this.setState({selectedPlaylistId: value }),
         nextRound: this.nextRound,
-        setPlaylist: (playlist) => this.setState({playlistItems: playlist})
+        setPlaylist: (playlist) => this.setState({playlistItems: playlist}),
+        addPlayer: (player) => this.setState({
+          players: new Map([...this.state.players, [player, {score: 0, currentVote:""}]])
+        }),
+        setVote: this.setVote,
+        setScore: this.addScore
       }}>
         {this.props.children}
       </HostContext.Provider>
