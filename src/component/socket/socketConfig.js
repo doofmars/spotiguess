@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
 
-const socket = openSocket("https://spotiguess.herokuapp.com/");
+const socket = openSocket(process.env.REACT_APP_URL);
 
 export default socket;

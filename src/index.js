@@ -7,6 +7,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
+    <p style={{"visibility": "hidden"}}>{process.env.NODE_ENV} - {process.env.REACT_APP_URL}</p>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
