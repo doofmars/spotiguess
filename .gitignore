@@ -46,3 +46,6 @@ sample*.js
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+## ignore npm package-lock ##
+package-lock.json
