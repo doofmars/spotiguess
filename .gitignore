@@ -49,3 +49,6 @@ sample*.js
 
 ## ignore npm package-lock ##
 package-lock.json
+
+# Ignore local env config
+.env*.local
