@@ -12,11 +12,17 @@ export default class LoginInfo extends React.Component {
 
   constructor(props) {
     super(props);
+    let roomcode = ''
+
+    if (process.env.NODE_ENV === "development") {
+      roomcode = 'AAAAA'
+    }
+
     this.state = {
       warning: '',
       warning_visible: false,
       name: '',
-      roomcode: ''
+      roomcode: roomcode
     };
   }
 
