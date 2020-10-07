@@ -51,6 +51,7 @@ class HostContextProvider extends React.Component {
       if (rightAnswer === playerData.currentVote) {
         this.addScore(playerName);
       }
+      this.setVote(playerName, "");
     });
   }
 
