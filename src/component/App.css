@@ -38,6 +38,11 @@
   color: #2e77d0;
 }
 
+.sbtn-gray {
+  background-color: #eee;
+  color: #000;
+}
+
 .sbtn-yellow {
   background-color: #fff85b;
   color: #000;
@@ -56,4 +61,3 @@
 .selected {
   background-color: #7E858C;
 }
-
