@@ -120,7 +120,11 @@ export default class Game extends React.Component {
   render() {
     const joinedPlayer = [];
     this.context.state.players.forEach((value, key) => {
-      joinedPlayer.push(<JoinedPlayer name={key} key={key} score={value.score}/>)
+      let hasVoted = (value.currentVote !== "" && value.currentVote !== undefined);
+      let isCorrect = hasVoted && this.state.songData.added_by.id === value.currentVote;
+      joinedPlayer.push(<JoinedPlayer
+        name={key} key={key} score={value.score}
+        isCorrect={isCorrect} hasVoted={hasVoted} showResult={this.state.showResult}/>)
     });
 
     return (
