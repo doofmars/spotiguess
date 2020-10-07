@@ -21,3 +21,9 @@
   margin-right: 6px;
 }
 
+.config {
+  background-color: #343a40;
+  color: #fff;
+  padding: 20px 200px 20px 200px;
+  margin-bottom: 1rem;
+}

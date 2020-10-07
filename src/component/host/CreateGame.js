@@ -7,6 +7,7 @@ import getPlaylist from '../api/getPlaylist.js'
 import JoinedPlayer from './JoinedPlayer.js'
 import { HostContext } from './HostContextProvider.js'
 import socket from "../socket/socketConfig";
+import Switch from "react-switch";
 
 export default class CreateGame extends React.Component {
   static contextType = HostContext;
@@ -123,11 +124,34 @@ export default class CreateGame extends React.Component {
           </div>
         </div>
       </div>
-              </div>
-            </div>
+    );
+  }
+}
+
+class Config extends React.Component {
+  render() {
+    return (
+      <form className="config">
+        <div className="form-group row">
+          <label className="col-sm-6 col-form-label text-right">Number of rounds</label>
+          <div className="col-sm-6">
+            <input type="number" className="form-control"
+              value={this.props.context.state.rounds} onChange={(value) => this.props.context.setRounds(value)} />
           </div>
         </div>
-      </div>
+        <div className="form-group row">
+          <label className="col-sm-6 col-form-label text-right">Show who has voted</label>
+          <div className="col-sm-6">
+            <Switch onChange={this.props.context.setShowVotes} checked={this.props.context.state.showVotes}  uncheckedIcon={false} checkedIcon={false}/>
+          </div>
+        </div>
+        <div className="form-group row">
+          <label className="col-sm-6 col-form-label text-right">Show score while playing</label>
+          <div className="col-sm-6">
+            <Switch onChange={this.props.context.setShowScore} checked={this.props.context.state.showScore}  uncheckedIcon={false} checkedIcon={false}/>
+          </div>
+        </div>
+      </form>
     );
   }
 }

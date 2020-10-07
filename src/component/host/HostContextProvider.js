@@ -13,7 +13,8 @@ class HostContextProvider extends React.Component {
       rounds:30,                        //number of rounds
       roundEnd:30,                      //Current end round increased for continue playing
       missingPreviewSkip: true,         //skip songs without preview
-      showVotes: true,                  //Instantly show if a player has voted
+      showVotes: false,                 //Instantly show if a player has voted
+      showScore: false,                 //Show score while playing
       players: new Map(),               //key name, values: {score:num, currentVote:str}
       selectedPlaylistId: "",           //Selected playlist id
       volume: 0.2,                      //Sound volume
@@ -53,6 +54,28 @@ class HostContextProvider extends React.Component {
     });
   }
 
+  setRounds = (e) => {
+    let value = e.target.valueAsNumber;
+    if (Number.isInteger(value)) {
+      this.setState({rounds: value, roundEnd: value})
+    }
+  }
+
+  setRoundsEnd = (e) => {
+    let value = e.target.valueAsNumber;
+    if (Number.isInteger(value)) {
+      this.setState({roundEnd: value})
+    }
+  }
+
+  setShowVotes = () => {
+    this.setState({showVotes: !this.state.showVotes})
+  }
+
+  setShowScore = () => {
+    this.setState({showScore: !this.state.showScore})
+  }
+
   render() {
     return (
       <HostContext.Provider value={
@@ -65,7 +88,10 @@ class HostContextProvider extends React.Component {
         }),
         setVote: this.setVote,
         countVotes: this.countVotes,
-        addScore: this.addScore
+        addScore: this.addScore,
+        setShowVotes: this.setShowVotes,
+        setShowScore: this.setShowScore,
+        setRounds: this.setRounds
       }}>
         {this.props.children}
       </HostContext.Provider>
