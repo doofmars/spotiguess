@@ -29,7 +29,7 @@ export default class Game extends React.Component {
     this.state = {itemsId: 0}
     // Get init state by calling nextTrack()
     let initState = this.nextTrack();
-    // Add options to state
+    // Add options and showResult to state
     initState.options = getVotingOptions(context.state.playlistItems)
     this.state = initState;
     // Propagate round start to clients
@@ -117,7 +117,6 @@ export default class Game extends React.Component {
     socket.off('vote');
   }
 
-
   render() {
     const joinedPlayer = [];
     this.context.state.players.forEach((value, key) => {
@@ -126,7 +125,7 @@ export default class Game extends React.Component {
 
     return (
       <div className="game container">
-        <Song songData={this.state.songData} />
+        <Song songData={this.state.songData} showResult={this.state.showResult} updateShowResults={(value) => this.setState({showResult: value})} />
         <div className="container">
           <div className="row">
             <div className="col play players">
