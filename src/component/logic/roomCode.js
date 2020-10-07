@@ -9,5 +9,8 @@ export default function generateRoomCode() {
   for (var i = 0; i < 5; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
+  if (process.env.NODE_ENV === "development") {
+    return "AAAAA";
+  }
   return text;
 }

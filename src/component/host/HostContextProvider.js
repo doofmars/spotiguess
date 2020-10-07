@@ -13,7 +13,8 @@ class HostContextProvider extends React.Component {
       rounds:30,                        //number of rounds
       roundEnd:30,                      //Current end round increased for continue playing
       missingPreviewSkip: true,         //skip songs without preview
-      showVotes: true,                  //Instantly show if a player has voted
+      showVotes: false,                 //Instantly show if a player has voted
+      showScore: false,                 //Show score while playing
       players: new Map(),               //key name, values: {score:num, currentVote:str}
       selectedPlaylistId: "",           //Selected playlist id
       volume: 0.2,                      //Sound volume
@@ -50,22 +51,49 @@ class HostContextProvider extends React.Component {
       if (rightAnswer === playerData.currentVote) {
         this.addScore(playerName);
       }
+      this.setVote(playerName, "");
     });
+  }
+
+  setRounds = (e) => {
+    let value = e.target.valueAsNumber;
+    if (Number.isInteger(value) && value > 0) {
+      this.setState({rounds: value, roundEnd: value})
+    }
+  }
+
+  setRoundsEnd = (value) => {
+    if (Number.isInteger(value) && value > this.state.rounds) {
+      this.setState({roundEnd: value})
+    }
+  }
+
+  setShowVotes = () => {
+    this.setState({showVotes: !this.state.showVotes})
+  }
+
+  setShowScore = () => {
+    this.setState({showScore: !this.state.showScore})
   }
 
   render() {
     return (
       <HostContext.Provider value={
       { state: this.state,
-        selectPlaylist: (value) => this.setState({selectedPlaylistId: value }),
+        selectPlaylist: (value) => this.setState({selectedPlaylistId: value}),
         nextRound: this.nextRound,
         setPlaylist: (playlist) => this.setState({playlistItems: playlist}),
         addPlayer: (player) => this.setState({
           players: new Map([...this.state.players, [player, {score: 0, currentVote:""}]])
         }),
+        setItemsId: (itemsId) => this.setState({itemsId: itemsId}),
         setVote: this.setVote,
         countVotes: this.countVotes,
-        addScore: this.addScore
+        addScore: this.addScore,
+        setShowVotes: this.setShowVotes,
+        setShowScore: this.setShowScore,
+        setRoundsEnd: this.setRoundsEnd,
+        setRounds: this.setRounds
       }}>
         {this.props.children}
       </HostContext.Provider>

@@ -8,6 +8,7 @@ import getVotingOptions from './../logic/votingOptions.js'
 import socket from "../socket/socketConfig";
 
 const COUNTDOWN = 20;
+const PREVIEW_DURATION = 30
 
 export default class Game extends React.Component {
   static contextType = HostContext;
@@ -26,7 +27,7 @@ export default class Game extends React.Component {
     }
     this.context = context;
     // Set pre initialize state since itemId is needed in nextTrack()
-    this.state = {itemsId: 0}
+    this.state = {itemsId: context.state.itemsId}
     // Get init state by calling nextTrack()
     let initState = this.nextTrack();
     // Add options to state
@@ -43,7 +44,7 @@ export default class Game extends React.Component {
       if (newState !== undefined) {
         this.setState(newState);
       }
-    }, 30_000);
+    }, PREVIEW_DURATION * 1000);
     socket.on('request-join', this.joinRequest);
     socket.on('vote', this.vote)
   }
@@ -51,6 +52,7 @@ export default class Game extends React.Component {
   nextTrack = () => {
     this.context.nextRound();
     if (this.context.state.round > this.context.state.roundEnd) {
+      this.context.setItemsId(this.state.itemsId)
       this.props.finishGame(this.context.state.players, true);
       return;
     }
@@ -58,9 +60,10 @@ export default class Game extends React.Component {
       this.context.state.playlistItems,
       this.state.itemsId,
       this.context.state.missingPreviewSkip);
-    if (itemsId < 0) {
-      this.props.finishGame(this.context.state.players, false);
-      return;
+      if (itemsId < 0) {
+        this.context.setItemsId(this.state.itemsId)
+        this.props.finishGame(this.context.state.players, false);
+        return;
     }
     let date = new Date();
     date.setSeconds(date.getSeconds() + COUNTDOWN);
@@ -117,16 +120,19 @@ export default class Game extends React.Component {
     socket.off('vote');
   }
 
-
   render() {
     const joinedPlayer = [];
     this.context.state.players.forEach((value, key) => {
-      joinedPlayer.push(<JoinedPlayer name={key} key={key} score={value.score}/>)
+      let hasVoted = (value.currentVote !== "" && value.currentVote !== undefined);
+      let isCorrect = hasVoted && this.state.songData.added_by.id === value.currentVote;
+      joinedPlayer.push(<JoinedPlayer
+        name={key} key={key} score={value.score}
+        isCorrect={isCorrect} hasVoted={hasVoted} showResult={this.state.showResult}/>)
     });
 
     return (
       <div className="game container">
-        <Song songData={this.state.songData} />
+        <Song songData={this.state.songData} showResult={this.state.showResult} updateShowResults={(value) => this.setState({showResult: value})} />
         <div className="container">
           <div className="row">
             <div className="col play players">

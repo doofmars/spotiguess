@@ -8,7 +8,6 @@ export default class Song extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showResult: false,
       countdown: 20,
       audio: new Audio(this.props.songData.track.preview_url)
     }
@@ -22,7 +21,7 @@ export default class Song extends React.Component {
     this.timer = setInterval(() => {
       this.setState({ countdown: this.state.countdown - 1 });
       if (this.state.countdown === 0) {
-        this.setState({showResult: true})
+        this.props.updateShowResults(true)
       }
     }, 1000);
   }
@@ -32,14 +31,14 @@ export default class Song extends React.Component {
       clearInterval(this.timer);
       this.state.audio.pause()
       this.state.audio.src = this.props.songData.track.preview_url;
+      this.props.updateShowResults(false)
       this.setState({
-        showResult: false,
         countdown: 20
       });
       this.timer = setInterval(() => {
         this.setState({ countdown: this.state.countdown - 1 });
         if (this.state.countdown === 0) {
-          this.setState({showResult: true})
+          this.props.updateShowResults(true)
         }
       }, 1000);
       this.state.audio.volume = this.context.state.volume
@@ -55,7 +54,7 @@ export default class Song extends React.Component {
   render() {
     let track = this.props.songData.track;
     let addedBy = this.props.songData.added_by.id;
-    let showResult = this.state.showResult;
+    let showResult = this.props.showResult;
     let resultPanel;
     if (!showResult) {
       resultPanel = <div id="countdown" key={this.props.songData.track.id}>
