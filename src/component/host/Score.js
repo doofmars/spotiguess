@@ -1,11 +1,19 @@
 import React from 'react';
 import './Score.css';
 import PropTypes from 'prop-types';
+import { HostContext } from './HostContextProvider.js'
 
 export default class Score extends React.Component {
+  static contextType = HostContext;
+
   static propTypes = {
     viewChangeEvent: PropTypes.func.isRequired,
     results: PropTypes.object.isRequired
+  }
+
+  onContinueClick = () => {
+    this.context.setRoundsEnd(this.context.state.roundEnd + this.context.state.rounds + 1)
+    this.props.continue()
   }
 
   render() {
@@ -19,6 +27,11 @@ export default class Score extends React.Component {
         results.push({name:playerName, score:playerData.score});
       }
     });
+
+    let continueBtn
+    if (this.props.canContinue) {
+      continueBtn = <button className="sbtn sbtn-white mb-1 float-right" onClick={this.onContinueClick}>Continue Playing</button>
+    }
 
     return (
       <div className="score content">
@@ -43,7 +56,7 @@ export default class Score extends React.Component {
           </tbody>
         </table>
         <button className="sbtn sbtn-green mb-1 float-right" onClick={this.props.viewChangeEvent.bind(this, 'lobby')}>Back to Lobby</button>
-        <button className="sbtn sbtn-white mb-1 float-right" onClick={this.props.viewChangeEvent.bind(this, 'lobby')}>Continue Playing</button>
+        {continueBtn}
       </div>
     );
   }

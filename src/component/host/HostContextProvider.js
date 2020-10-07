@@ -57,14 +57,13 @@ class HostContextProvider extends React.Component {
 
   setRounds = (e) => {
     let value = e.target.valueAsNumber;
-    if (Number.isInteger(value)) {
+    if (Number.isInteger(value) && value > 0) {
       this.setState({rounds: value, roundEnd: value})
     }
   }
 
-  setRoundsEnd = (e) => {
-    let value = e.target.valueAsNumber;
-    if (Number.isInteger(value)) {
+  setRoundsEnd = (value) => {
+    if (Number.isInteger(value) && value > this.state.rounds) {
       this.setState({roundEnd: value})
     }
   }
@@ -81,17 +80,19 @@ class HostContextProvider extends React.Component {
     return (
       <HostContext.Provider value={
       { state: this.state,
-        selectPlaylist: (value) => this.setState({selectedPlaylistId: value }),
+        selectPlaylist: (value) => this.setState({selectedPlaylistId: value}),
         nextRound: this.nextRound,
         setPlaylist: (playlist) => this.setState({playlistItems: playlist}),
         addPlayer: (player) => this.setState({
           players: new Map([...this.state.players, [player, {score: 0, currentVote:""}]])
         }),
+        setItemsId: (itemsId) => this.setState({itemsId: itemsId}),
         setVote: this.setVote,
         countVotes: this.countVotes,
         addScore: this.addScore,
         setShowVotes: this.setShowVotes,
         setShowScore: this.setShowScore,
+        setRoundsEnd: this.setRoundsEnd,
         setRounds: this.setRounds
       }}>
         {this.props.children}

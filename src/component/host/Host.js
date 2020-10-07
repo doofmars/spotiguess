@@ -15,6 +15,7 @@ export default class Host extends React.Component {
     this.state = {
       gamePhase: "started",
       results: {},
+      canContinue: true,
       roomcode: generateRoomCode()
     };
   }
@@ -26,7 +27,14 @@ export default class Host extends React.Component {
   finishGame = (results, canContinue) => {
     this.setState({
       gamePhase: "finished",
+      canContinue: canContinue,
       results: results
+    });
+  }
+
+  continue = () => {
+    this.setState({
+      gamePhase: "running"
     });
   }
 
@@ -47,7 +55,7 @@ export default class Host extends React.Component {
     if (gamePhase === "running") {
       gameView = <Game viewChangeEvent={this.props.viewChangeEvent} finishGame={this.finishGame}/>
     } else if (gamePhase === "finished") {
-      gameView = <Score viewChangeEvent={this.props.viewChangeEvent} results={this.state.results}  />
+      gameView = <Score viewChangeEvent={this.props.viewChangeEvent} results={this.state.results} continue={this.continue} canContinue={this.state.canContinue}  />
     } else {
       gameView = <CreateGame viewChangeEvent={this.props.viewChangeEvent} startGame={this.startGame} />
     }
