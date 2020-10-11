@@ -32,7 +32,7 @@ function getPlaylistRecursive(items, offset, id, access_token, successHandler, e
     items = items.concat(response.data.items);
 
     if (offset + 100 < response.data.total) {
-      getPlaylistRecursive(items, offset + 100, id, access_token);
+      getPlaylistRecursive(items, offset + 100, id, access_token, successHandler, errorHandler);
     } else {
       console.log('Total items: ' + items.length);
       shuffleArray(items);
