@@ -2,16 +2,16 @@
  * Login to spotify using implicit grant oauth flow
  */
 export default function login() {
-  var client_id = '10bc80659da04939b8ff8b6014793016'; // Your client id
-  var redirect_uri = window.location.href; // Your redirect uri
+  const client_id = '10bc80659da04939b8ff8b6014793016'; // Your client id
+  const redirect_uri = window.location.href; // Your redirect uri
 
-  var state = generateRandomString(16);
+  const state = generateRandomString(16);
 
   localStorage.setItem(stateKey, state);
   //user-read-private user-read-email
-  var scope = 'playlist-read-collaborative';
+  const scope = 'playlist-read-collaborative';
 
-  var url = 'https://accounts.spotify.com/authorize';
+  let url = 'https://accounts.spotify.com/authorize';
   url += '?response_type=token';
   url += '&client_id=' + encodeURIComponent(client_id);
   url += '&scope=' + encodeURIComponent(scope);
@@ -19,10 +19,11 @@ export default function login() {
   url += '&state=' + encodeURIComponent(state);
 
   console.log("meh")
-  window.location = url;
+  window.location.href = url;
 }
 
 var stateKey = 'spotify_auth_state';
+
 /**
  * Helper to generate a random string for API access
  *

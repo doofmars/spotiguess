@@ -16,7 +16,8 @@
     "react-slidedown": "^2.4.7",
     "react-switch": "^7.0.0",
     "socket.io": "^4.5.4",
-    "socket.io-client": "^4.5.4"
+    "socket.io-client": "^4.5.4",
+    "typescript": "^4.9.3"
   },
   "scripts": {
     "start": "node server.js",

@@ -1,8 +1,16 @@
-import React from 'react';
-import { HostContext } from './HostContextProvider.js'
+import * as React from 'react';
+import {HostContext} from './HostContextProvider'
 
-export default class JoinedPlayer extends React.Component {
-  static contextType = HostContext;
+type IProps = {
+  name: string
+  hasVoted?: boolean;
+  isCorrect?: boolean
+  score?: number
+  showResult?: boolean
+}
+
+export default class JoinedPlayer extends React.Component<IProps> {
+  context!: React.ContextType<typeof HostContext>
   render() {
     let text = this.props.name
     if (this.props.score !== undefined && this.context.state.showScore) {

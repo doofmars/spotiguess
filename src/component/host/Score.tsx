@@ -1,10 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import './Score.css';
-import PropTypes from 'prop-types';
-import { HostContext } from './HostContextProvider.js'
+import * as PropTypes from 'prop-types';
+import { HostContext } from './HostContextProvider'
+import {PlayerData} from "./PlayerData";
 
-export default class Score extends React.Component {
-  static contextType = HostContext;
+type IProps = {
+  viewChangeEvent: Function;
+  continue: Function;
+  canContinue: boolean;
+  results: Map<string, PlayerData>;
+}
+
+export default class Score extends React.Component<IProps> {
+  context!: React.ContextType<typeof HostContext>
 
   static propTypes = {
     viewChangeEvent: PropTypes.func.isRequired,

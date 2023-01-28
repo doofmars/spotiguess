@@ -1,21 +1,39 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Song from './Song.js';
-import { HostContext } from './HostContextProvider.js'
-import JoinedPlayer from './JoinedPlayer.js'
-import {getNextTrack, hasNextTrack} from './../logic/nextSong.js'
-import getVotingOptions from './../logic/votingOptions.js'
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+import Song from './Song';
+import { HostContext } from './HostContextProvider'
+import JoinedPlayer from './JoinedPlayer'
+import {getNextTrack, hasNextTrack} from '../logic/nextSong'
+import getVotingOptions from '../logic/votingOptions'
 import socket from "../socket/socketConfig";
+import {PlaylistItem} from "./Playlist";
 
 const COUNTDOWN = 20;
 const PREVIEW_DURATION = 30
 
-export default class Game extends React.Component {
-  static contextType = HostContext;
+type IProps = {
+  viewChangeEvent: Function;
+  finishGame: Function;
+}
+
+type IState = {
+  itemsId: number;
+  songData?: PlaylistItem;
+  showResult?: boolean;
+  countdown?: number;
+  audio?: any;
+  options: Array<string>;
+  voteTime?: number;
+}
+
+export default class Game extends React.Component<IProps, IState> {
+  context!: React.ContextType<typeof HostContext>
   static propTypes = {
     viewChangeEvent: PropTypes.func.isRequired,
     finishGame: PropTypes.func.isRequired
   }
+  state: IState
+  private timer: NodeJS.Timeout;
 
   constructor(props, context) {
     super(props);
@@ -27,12 +45,15 @@ export default class Game extends React.Component {
     }
     this.context = context;
     // Set pre initialize state since itemId is needed in nextTrack()
-    this.state = {itemsId: context.state.itemsId}
+    this.state = {
+      itemsId: context.state.itemsId,
+      options: getVotingOptions(context.state.playlistItems)
+    }
     // Get init state by calling nextTrack()
     let initState = this.nextTrack();
-    // Add options to state
-    initState.options = getVotingOptions(context.state.playlistItems)
-    this.state = initState;
+    this.setState(
+      initState
+    )
     // Propagate round start to clients
     socket.emit('options', {roomcode: context.state.roomcode, options: this.state.options})
   }

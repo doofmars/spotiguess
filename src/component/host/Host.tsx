@@ -1,23 +1,39 @@
-import React from 'react';
+import * as React from 'react';
 import './Host.css';
-import CreateGame from './CreateGame.js'
-import Game from './Game.js'
-import Score from './Score.js'
-import generateRoomCode from './../logic/roomCode.js'
-import {HostContextProvider, HostContext} from './HostContextProvider.js'
+import CreateGame from './CreateGame'
+import Game from './Game'
+import Score from './Score'
+import generateRoomCode from '../logic/roomCode'
+import {HostContextProvider, HostContext} from './HostContextProvider'
 import socket from "../socket/socketConfig";
+import {PlayerData} from "./PlayerData";
 
-export default class Host extends React.Component {
-  static contextType = HostContext;
+type IProps = {
+  viewChangeEvent: Function;
+  hash_parameters: {
+    roomcode: string
+    access_token: string
+  };
+}
+
+type IState = {
+  gamePhase: string;
+  results: Map<string, PlayerData>;
+  canContinue: boolean;
+  roomcode: string;
+}
+export default class Host extends React.Component<IProps, IState> {
+  context!: React.ContextType<typeof HostContext>
+  state: IState
 
   constructor(props) {
     super(props);
     this.state = {
       gamePhase: "started",
-      results: {},
+      results: new Map(),
       canContinue: true,
       roomcode: generateRoomCode()
-    };
+    }
   }
 
   startGame = () => {
@@ -63,7 +79,7 @@ export default class Host extends React.Component {
     return (
       <HostContextProvider
           roomcode={this.state.roomcode}
-          access_token={this.props.hash.access_token} >
+          access_token={this.props.hash_parameters.access_token} >
         <div className="corner-ribbon top-right sticky magenta">
           Room Code<br />
           <b id="room-code">{this.state.roomcode}</b>

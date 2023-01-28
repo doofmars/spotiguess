@@ -1,6 +1,6 @@
-export default function getHashParams() {
-  var hashParams = {};
-  var e, r = /([^&;=]+)=?([^&;]*)/g,
+export default function getHashParams(): {} {
+  const hashParams = {};
+  let e, r = /([^&;=]+)=?([^&;]*)/g,
     q = window.location.hash.substring(1);
   // Clear hash location from url to prevent access key leaking
   window.history.replaceState(null, null, ' ');

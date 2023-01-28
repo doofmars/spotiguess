@@ -1,13 +1,29 @@
-import React from 'react';
+import * as React from 'react';
 import './Voting.css';
 import PropTypes from 'prop-types';
 import socket from "../socket/socketConfig";
 
-export default class Voting extends React.Component {
+type IProps = {
+  name: string;
+  roomcode: string;
+}
+
+type IState = {
+  name: string
+  roomcode: string
+  warning: boolean;
+  info: string;
+  options: any;
+  selectedOption: string;
+  voteTime: number;
+}
+
+export default class Voting extends React.Component<IProps, IState> {
   static propTypes = {
     name: PropTypes.string.isRequired,
     roomcode: PropTypes.string.isRequired
   }
+  state: IState
 
   constructor(props) {
     super(props);
@@ -15,10 +31,11 @@ export default class Voting extends React.Component {
       name: this.props.name,
       roomcode: this.props.roomcode,
       info: "Wait until the host has started the game or the next round is started.",
+      warning: false,
       options: [],
       selectedOption: '',
       voteTime: new Date().getTime()
-    };
+    }
   }
 
   componentDidMount() {

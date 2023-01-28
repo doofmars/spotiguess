@@ -1,23 +1,46 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import './Song.css';
-import artistList from './../logic/artistList.js';
-import { HostContext } from './HostContextProvider.js'
+import artistList from '../logic/artistList';
+import {HostContext} from './HostContextProvider'
+import {Playlist, PlaylistItem} from "./Playlist";
 
-export default class Song extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      countdown: 20,
-      audio: new Audio(this.props.songData.track.preview_url)
-    }
+type IProps = {
+  songData: PlaylistItem;
+  showResult: boolean;
+  updateShowResults: Function;
+}
+
+type IState = {
+  countdown: number;
+  audio: any;
+  playlists: Playlist;
+  animate: any
+  view: string; message: string; hash: null
+}
+
+export default class Song extends React.Component<IProps, IState> {
+  static propTypes = {
+    songData: PropTypes.object.isRequired
   }
 
-  static contextType = HostContext;
+  state: IState
+  private timer: NodeJS.Timeout;
+
+  constructor(props) {
+    super(props);
+    let audio = new Audio(this.props.songData.track.preview_url);
+    audio.volume = this.context.state.volume;
+    this.setState({
+      countdown: 20,
+      audio: audio
+    })
+  }
+
+  context!: React.ContextType<typeof HostContext>
 
   componentDidMount() {
     this.state.audio.play()
-    this.state.audio.volume = this.context.state.volume
     this.timer = setInterval(() => {
       this.setState({ countdown: this.state.countdown - 1 });
       if (this.state.countdown === 0) {
@@ -30,7 +53,6 @@ export default class Song extends React.Component {
     if (this.props.songData.track.id !== prevProps.songData.track.id) {
       clearInterval(this.timer);
       this.state.audio.pause()
-      this.state.audio.src = this.props.songData.track.preview_url;
       this.props.updateShowResults(false)
       this.setState({
         countdown: 20
@@ -41,7 +63,12 @@ export default class Song extends React.Component {
           this.props.updateShowResults(true)
         }
       }, 1000);
-      this.state.audio.volume = this.context.state.volume
+      let audio = this.state.audio
+      audio.src = this.props.songData.track.preview_url;
+      audio.volume = this.context.state.volume
+      this.setState({
+        audio: audio
+      })
       this.state.audio.play()
     }
   }
@@ -57,6 +84,7 @@ export default class Song extends React.Component {
     let showResult = this.props.showResult;
     let resultPanel;
     if (!showResult) {
+      //TODO: find out what animate does here?!?
       resultPanel = <div id="countdown" key={this.props.songData.track.id}>
                       <div id="countdown-number">{this.state.countdown}</div>
                       <svg>
@@ -70,7 +98,10 @@ export default class Song extends React.Component {
     }
     return (
       <div id="song" className="content">
-        <img width={track.album.images[0].width} height={track.album.images[0].height} src={track.album.images[0].url}></img>
+        <img width={track.album.images[0].width}
+             height={track.album.images[0].height}
+             src={track.album.images[0].url}
+             alt={track.album.name}></img>
         <div className="container smaller">
           <div className="row">
             <div className="col" id="song-info">
@@ -89,8 +120,4 @@ export default class Song extends React.Component {
     );
   }
 }
-
-Song.propTypes = {
-  songData: PropTypes.object.isRequired
-};
 
