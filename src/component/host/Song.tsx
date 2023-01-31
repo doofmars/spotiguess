@@ -2,42 +2,33 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import './Song.css';
 import artistList from '../logic/artistList';
-import {HostContext} from './HostContextProvider'
 import {Playlist, PlaylistItem} from "./Playlist";
 
 type IProps = {
   songData: PlaylistItem;
+  songVolume: number;
   showResult: boolean;
   updateShowResults: Function;
 }
 
 type IState = {
-  countdown: number;
-  audio: any;
-  playlists: Playlist;
-  animate: any
-  view: string; message: string; hash: null
+  countdown: number
+  audio: any
 }
 
 export default class Song extends React.Component<IProps, IState> {
-  static propTypes = {
-    songData: PropTypes.object.isRequired
-  }
-
   state: IState
   private timer: NodeJS.Timeout;
 
   constructor(props) {
     super(props);
     let audio = new Audio(this.props.songData.track.preview_url);
-    audio.volume = this.context.state.volume;
-    this.setState({
+    audio.volume = this.props.songVolume
+    this.state = {
       countdown: 20,
       audio: audio
-    })
+    }
   }
-
-  context!: React.ContextType<typeof HostContext>
 
   componentDidMount() {
     this.state.audio.play()
@@ -65,7 +56,7 @@ export default class Song extends React.Component<IProps, IState> {
       }, 1000);
       let audio = this.state.audio
       audio.src = this.props.songData.track.preview_url;
-      audio.volume = this.context.state.volume
+      audio.volume = this.props.songVolume
       this.setState({
         audio: audio
       })
@@ -84,11 +75,10 @@ export default class Song extends React.Component<IProps, IState> {
     let showResult = this.props.showResult;
     let resultPanel;
     if (!showResult) {
-      //TODO: find out what animate does here?!?
       resultPanel = <div id="countdown" key={this.props.songData.track.id}>
                       <div id="countdown-number">{this.state.countdown}</div>
                       <svg>
-                        <circle r="36" cx="40" cy="40" style={this.state.animate}></circle>
+                        <circle r="36" cx="40" cy="40"></circle>
                       </svg>
                     </div>
     } else {

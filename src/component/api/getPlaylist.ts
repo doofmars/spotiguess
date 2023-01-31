@@ -16,7 +16,7 @@ export default function getPlaylist(id, access_token, successHandler, errorHandl
  * Recursively get all playlist items if playlist has more than 100 items of Spotify api limit
  *
  * @param {Array} items Collected track list used for recursion
- * @param {Integer} offset current offset
+ * @param {Number} offset current offset
  * @param {String} id Playlist ID
  * @param {String} access_token Spotify access token
  * @param {Function} successHandler Callback when all tracks are received
@@ -29,7 +29,7 @@ function getPlaylistRecursive(items, offset, id, access_token, successHandler, e
         'Authorization': 'Bearer ' + access_token
       }
     }).then(response => {
-    var stats = {limit: response.data.limit, offset: response.data.offset, total: response.data.total};
+    const stats = {limit: response.data.limit, offset: response.data.offset, total: response.data.total};
     console.log('Received items: ' + JSON.stringify(stats));
 
     items = items.concat(response.data.items);

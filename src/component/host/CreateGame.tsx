@@ -1,60 +1,65 @@
 import * as React from 'react';
 import './CreateGame.css';
 import axios from 'axios';
-import * as PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image'
 import getPlaylist from '../api/getPlaylist'
 import JoinedPlayer from './JoinedPlayer'
-import {HostContext} from './HostContextProvider'
 import socket from "../socket/socketConfig";
 import Switch from "react-switch";
 import {PlaylistOverview, PlaylistOverviewItem} from "./Playlist";
+import {PlayerData} from "./PlayerData";
+import {SpotiguessOptions} from "./Options";
 
 type IProps = {
   // Callback for error handling
-  viewChangeEvent: Function;
+  viewChangeEvent: Function
   // Callback for game has started
-  startGame: Function;
+  startGame: Function
+  // Used for spotify api access
+  access_token: string
+  // List of players
+  players: Map<string, PlayerData>
+  // Callback to add an incoming player
+  addPlayer: Function
+  // The default options
+  defaultOptions: SpotiguessOptions
 }
 
 type IState = {
-  warning: boolean;
-  showConfig: boolean;
-  playlistOverview: PlaylistOverview;
+  // Set to true if warning component should be visible
+  warning: boolean
+  // View config component
+  showConfig: boolean
+  // Overview response from spotify containing shared playlists
+  playlistOverview: PlaylistOverview
+  // ID of the selected playlist
+  selectedPlaylistId: string
+  // The options
+  options: SpotiguessOptions
 }
 
 // TODO: Switch to React Functional Components
 export default class CreateGame extends React.Component<IProps, IState> {
-  // TODO: Remove this
-  // static contextType = HostContext
-  // // For TS pre-3.7:
-  // context!: React.ContextType<typeof HostContext>
-  // // For TS 3.7 and above:
-  // declare context: React.ContextType<typeof HostContext>
-  // https://github.com/facebook/create-react-app/issues/8918
-  // https://github.com/facebook/create-react-app/pull/9235
-  context!: React.ContextType<typeof HostContext>
 
-  static propTypes = {
-    viewChangeEvent: PropTypes.func.isRequired,
-    startGame: PropTypes.func.isRequired
-  };
   state: IState
+
   constructor(props: IProps, context) {
-    super(props, context);
+    super(props, context)
     this.state = {
       warning: false,
       showConfig: false,
-      playlistOverview: {items: []}
+      selectedPlaylistId: "",
+      playlistOverview: {items: []},
+      options: this.props.defaultOptions
     }
   }
 
   componentDidMount() {
-    if (this.context.state.access_token !== undefined) {
+    if (this.props.access_token !== undefined) {
       axios.get('https://api.spotify.com/v1/me/playlists',
         {
           headers: {
-            'Authorization': 'Bearer ' + this.context.state.access_token
+            'Authorization': 'Bearer ' + this.props.access_token
           }
         }).then(response => {
         this.setState({
@@ -71,19 +76,16 @@ export default class CreateGame extends React.Component<IProps, IState> {
   }
 
   shuffleClick = () => {
-    if (this.context.state.selectedPlaylistId === "") {
+    if (this.state.selectedPlaylistId === "") {
       this.setState({warning: true});
       this.setShowConfig(false)
     } else {
       getPlaylist(
-        this.context.state.selectedPlaylistId,
-        this.context.state.access_token,
-        (playlist) => {
-          this.context.setPlaylist(playlist)
-          this.props.startGame();
-        },
+        this.state.selectedPlaylistId,
+        this.props.access_token,
+        (playlist) => this.props.startGame(playlist, this.state.options),
         () => {
-          this.props.viewChangeEvent('error', 'Could not select playlist');
+          this.props.viewChangeEvent('error', 'Could not select playlist')
         });
     }
   }
@@ -94,11 +96,11 @@ export default class CreateGame extends React.Component<IProps, IState> {
 
   joinRequest = (msg) => {
     socket.emit('join-accepted', msg);
-    if (this.context.state.players.get(msg.name)) {
+    if (this.props.players.get(msg.name)) {
       console.log('A Player Rejoined: ' + msg.name);
     } else {
       console.log('A Player Joined: ' + msg.name);
-      this.context.addPlayer(msg.name)
+      this.props.addPlayer(msg.name)
     }
   }
 
@@ -113,17 +115,48 @@ export default class CreateGame extends React.Component<IProps, IState> {
 
     if (this.state.showConfig) {
       title = "Configure game"
-      view = <HostContext.Consumer>{(context) => (<Config context={context}/>)}</HostContext.Consumer>
+      view = <Config
+        options={this.state.options}
+        setRounds={(rounds) => this.setState({
+          options: {
+            rounds: rounds,
+            showScore: this.state.options.showScore,
+            showVotes: this.state.options.showVotes,
+            volume: this.state.options.volume,
+            missingPreviewSkip: this.state.options.missingPreviewSkip,
+          }
+        })}
+        setShowScore={(showScore) => this.setState({
+          options: {
+            rounds: this.state.options.rounds,
+            showScore: showScore,
+            showVotes: this.state.options.showVotes,
+            volume: this.state.options.volume,
+            missingPreviewSkip: this.state.options.missingPreviewSkip,
+          }
+        })}
+        setShowVotes={(showVotes) => this.setState({
+          options: {
+            rounds: this.state.options.rounds,
+            showScore: this.state.options.showScore,
+            showVotes: showVotes,
+            volume: this.state.options.volume,
+            missingPreviewSkip: this.state.options.missingPreviewSkip,
+          }
+        })}/>
     } else {
       title = "Select a collaborative playlist";
-      view = <PlaylistTable playlistOverview={this.state.playlistOverview}/>
+      view = <PlaylistTable
+        playlistOverview={this.state.playlistOverview}
+        selectPlaylist={(playlistId) => this.setState({selectedPlaylistId: playlistId})}
+        selectedPlaylistId={this.state.selectedPlaylistId}/>
     }
 
-    if (this.context.state.players.size === 0) {
-      joinedPlayer.push(<JoinedPlayer name={"No one has joined yet"} key={0}/>)
+    if (this.props.players.size === 0) {
+      joinedPlayer.push(<JoinedPlayer name={"No one has joined yet"} key={0} player={false}/>)
     } else {
-      this.context.state.players.forEach((value, key) => {
-        joinedPlayer.push(<JoinedPlayer name={key} key={key} hasVoted={false}/>)
+      this.props.players.forEach((value, key) => {
+        joinedPlayer.push(<JoinedPlayer name={key} key={key} player={false}/>)
       });
     }
 
@@ -162,7 +195,23 @@ export default class CreateGame extends React.Component<IProps, IState> {
 }
 
 type ConfigProps = {
-  context: any
+  options: {
+    // Number of rounds to play
+    rounds: number
+    // sound volume
+    volume: number
+    // instantly show if a player has voted
+    showVotes: boolean
+    // show score while playing
+    showScore: boolean
+    // skip songs without preview
+    missingPreviewSkip: boolean
+  }
+  setRounds: Function
+  // setVolume: Function
+  setShowVotes: Function
+  setShowScore: Function
+  // setMissingPreviewSkip: Function
 }
 
 class Config extends React.Component<ConfigProps> {
@@ -173,20 +222,20 @@ class Config extends React.Component<ConfigProps> {
           <label className="col-sm-6 col-form-label text-right">Number of rounds</label>
           <div className="col-sm-6">
             <input type="number" className="form-control"
-                   value={this.props.context.state.rounds} onChange={(value) => this.props.context.setRounds(value)}/>
+                   value={this.props.options.rounds} onChange={(value) => this.props.setRounds(value)}/>
           </div>
         </div>
         <div className="form-group row">
           <label className="col-sm-6 col-form-label text-right">Show who has voted</label>
           <div className="col-sm-6">
-            <Switch onChange={this.props.context.setShowVotes} checked={this.props.context.state.showVotes}
+            <Switch onChange={() => this.props.setShowVotes} checked={this.props.options.showVotes}
                     uncheckedIcon={false} checkedIcon={false}/>
           </div>
         </div>
         <div className="form-group row">
           <label className="col-sm-6 col-form-label text-right">Show score while playing</label>
           <div className="col-sm-6">
-            <Switch onChange={this.props.context.setShowScore} checked={this.props.context.state.showScore}
+            <Switch onChange={() => this.props.setShowScore} checked={this.props.options.showScore}
                     uncheckedIcon={false} checkedIcon={false}/>
           </div>
         </div>
@@ -194,9 +243,13 @@ class Config extends React.Component<ConfigProps> {
     );
   }
 }
+
 type PlaylistProps = {
   playlistOverview: PlaylistOverview
+  selectedPlaylistId: string
+  selectPlaylist: Function
 }
+
 class PlaylistTable extends React.Component<PlaylistProps> {
   render() {
     return (
@@ -214,7 +267,11 @@ class PlaylistTable extends React.Component<PlaylistProps> {
         <tbody id="playlists">
         {this.props.playlistOverview.items.map((playlist, index) => {
           return (
-            <PlaylistRow playlistOverview={playlist} index={index} key={index}/>
+            <PlaylistRow
+              playlistOverview={playlist}
+              selectedPlaylistId={this.props.selectedPlaylistId}
+              selectPlaylist={this.props.selectPlaylist}
+              index={index} key={index}/>
           );
         })}
         </tbody>
@@ -225,34 +282,32 @@ class PlaylistTable extends React.Component<PlaylistProps> {
 
 
 type PlaylistRowProps = {
-  index: number;
-  key: number;
-  playlistOverview: PlaylistOverviewItem;
+  index: number
+  key: number
+  selectedPlaylistId: string
+  playlistOverview: PlaylistOverviewItem
+  selectPlaylist: Function
 }
 
 class PlaylistRow extends React.Component<PlaylistRowProps> {
   render() {
     return (
-      <HostContext.Consumer>
-        {(context) => (
-          <tr id={this.props.index.toString()}
-              className={context.state.selectedPlaylistId === this.props.playlistOverview.id ? 'selected' : null}>
-            <th scope="row">{this.props.index + 1}</th>
-            <td><Image width="150" height="150" thumbnail src={this.props.playlistOverview.images[0].url}/></td>
-            <td>{this.props.playlistOverview.name}</td>
-            <td>{this.props.playlistOverview.owner.display_name}</td>
-            <td>{this.props.playlistOverview.tracks.total}</td>
-            <td>
-              <button className="sbtn sbtn-green" id={this.props.playlistOverview.id} value={this.props.index} type="button"
-                      onClick={() => {
-                        context.selectPlaylist(this.props.playlistOverview.id)
-                      }}>
-                Select
-              </button>
-            </td>
-          </tr>
-        )}
-      </HostContext.Consumer>
-    );
+      <tr id={this.props.index.toString()}
+          className={this.props.selectedPlaylistId === this.props.playlistOverview.id ? 'selected' : null}>
+        <th scope="row">{this.props.index + 1}</th>
+        <td><Image width="150" height="150" thumbnail src={this.props.playlistOverview.images[0].url}/></td>
+        <td>{this.props.playlistOverview.name}</td>
+        <td>{this.props.playlistOverview.owner.display_name}</td>
+        <td>{this.props.playlistOverview.tracks.total}</td>
+        <td>
+          <button className="sbtn sbtn-green" id={this.props.playlistOverview.id} value={this.props.index} type="button"
+                  onClick={() => {
+                    this.props.selectPlaylist(this.props.playlistOverview.id)
+                  }}>
+            Select
+          </button>
+        </td>
+      </tr>
+    )
   }
 }
