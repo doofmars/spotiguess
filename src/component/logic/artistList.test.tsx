@@ -1,4 +1,4 @@
-import artistList from './artistList.js';
+import artistList from './artistList';
 
 test('get single artist', () => {
 

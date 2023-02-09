@@ -1,17 +1,28 @@
-import React from 'react';
+import * as React from 'react';
 import './Lobby.css';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import login from "./api/login";
 import LoginInfo from "./LoginInfo";
 
-export default class Lobby extends React.Component {
+type IProps = {
+  votingViewChange: Function;
+}
+
+type IState = {
+  loginInfoHidden: boolean;
+}
+
+export default class Lobby extends React.Component<IProps, IState> {
   static propTypes = {
     votingViewChange: PropTypes.func.isRequired
   }
+  state: IState
 
   constructor(props) {
     super(props);
-    this.state = {loginInfoHidden: true};
+    this.state = {
+      loginInfoHidden: true
+    }
     this.handleToggleClick = this.handleToggleClick.bind(this);
   }
 

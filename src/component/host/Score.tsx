@@ -1,21 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import './Score.css';
-import PropTypes from 'prop-types';
-import { HostContext } from './HostContextProvider.js'
+import {PlayerData} from "./PlayerData";
 
-export default class Score extends React.Component {
-  static contextType = HostContext;
+type IProps = {
+  viewChangeEvent: (newView: string, message: string) => void;
+  continue: () => void;
+  canContinue: boolean;
+  results: Map<string, PlayerData>;
+}
 
-  static propTypes = {
-    viewChangeEvent: PropTypes.func.isRequired,
-    results: PropTypes.object.isRequired
-  }
-
-  onContinueClick = () => {
-    this.context.setRoundsEnd(this.context.state.roundEnd + this.context.state.rounds + 1)
-    this.props.continue()
-  }
-
+export default class Score extends React.Component<IProps> {
   render() {
     let results = [];
     let max = 0;
@@ -30,7 +24,7 @@ export default class Score extends React.Component {
 
     let continueBtn
     if (this.props.canContinue) {
-      continueBtn = <button className="sbtn sbtn-white mb-1 float-right" onClick={this.onContinueClick}>Continue Playing</button>
+      continueBtn = <button className="sbtn sbtn-white mb-1 float-right" onClick={() => this.props.continue}>Continue Playing</button>
     }
 
     return (

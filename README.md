@@ -48,13 +48,18 @@ If frontend has been build `yarn build` the server uses the express framework to
 
 In the project directory, you can run:
 
-### `yarn start`
+### `yarn develop`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
+
+### `yarn start`
+
+Runs the app as node server in production mode.<br />
+Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
 
 ### `yarn test`
 

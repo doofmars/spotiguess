@@ -1,8 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import login from "../api/login";
 
+type IProps = {
+  viewChangeEvent: (newView: string, message: string) => void;
+  message: string;
+}
 
-export default class LoginError extends React.Component {
+export default class LoginError extends React.Component<IProps> {
 
   retryClick() {
     login();

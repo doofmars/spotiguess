@@ -52,3 +52,6 @@ package-lock.json
 
 # Ignore local env config
 .env*.local
+
+# Idea
+.idea

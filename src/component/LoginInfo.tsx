@@ -1,14 +1,28 @@
-import React from 'react';
+import * as React from 'react';
 import './LoginInfo.css';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import 'react-slidedown/lib/slidedown.css'
 import {SlideDown} from 'react-slidedown'
 import joinGame from "./socket/joinGame";
+import {CSSProperties} from "react";
 
-export default class LoginInfo extends React.Component {
+type IProps = {
+  hidden: boolean;
+  votingViewChange: Function;
+}
+
+type IState = {
+  warning: string;
+  warning_visible: boolean;
+  name: string;
+  roomcode: string;
+}
+
+export default class LoginInfo extends React.Component<IProps, IState> {
   static propTypes = {
     votingViewChange: PropTypes.func.isRequired
   }
+  state: IState
 
   constructor(props) {
     super(props);
@@ -17,17 +31,21 @@ export default class LoginInfo extends React.Component {
     if (process.env.NODE_ENV === "development") {
       roomcode = 'AAAAA'
     }
-
     this.state = {
       warning: '',
       warning_visible: false,
       name: '',
       roomcode: roomcode
-    };
+    }
   }
 
   onChange = (e) => {
-    this.setState({[e.target.name]: e.target.value})
+    if (e.target.name === 'roomcode') {
+      this.setState({roomcode: e.target.value})
+    }
+    if (e.target.name === 'name') {
+      this.setState({name: e.target.value})
+    }
   }
 
   join = () => {
@@ -53,18 +71,18 @@ export default class LoginInfo extends React.Component {
   }
 
   render() {
-    let visibility = "hidden";
+    let visibility: CSSProperties = {visibility: "hidden"};
     if (this.state.warning_visible) {
-      visibility = "visible";
+      visibility = {visibility: "visible"};
     }
 
     return (
       <SlideDown className="my-dropdown-slidedown" closed={this.props.hidden}>
         <div id="join-info">
-          <input id="name" name="name" maxLength="15" type="text" className="form-control mb-1" placeholder="Name"
+          <input id="name" name="name" maxLength={15} type="text" className="form-control mb-1" placeholder="Name"
             onChange={(value) => this.onChange(value)} value={this.state.name} />
           <input id="roomcode" name="roomcode" type="text" className="form-control mb-1"
-            maxLength="5" placeholder="roomcode" style={{'textTransform': 'uppercase'}}
+            maxLength={5} placeholder="roomcode" style={{'textTransform': 'uppercase'}}
             onChange={(value) => this.onChange(value)} value={this.state.roomcode} />
           <button className="sbtn sbtn-green mb-1 float-right" id="join-accept" type="button"
             onClick={this.join}>
@@ -73,7 +91,7 @@ export default class LoginInfo extends React.Component {
         </div>
         <div className="join-waring">
           <p id="bad-message" className="text-danger"
-            style={{'visibility': visibility}}>{this.state.warning}</p>
+            style={visibility}>{this.state.warning}</p>
         </div>
       </SlideDown>
     );

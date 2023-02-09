@@ -16,17 +16,20 @@ export default function getPlaylist(id, access_token, successHandler, errorHandl
  * Recursively get all playlist items if playlist has more than 100 items of Spotify api limit
  *
  * @param {Array} items Collected track list used for recursion
- * @param {Integer} offset current offset
+ * @param {Number} offset current offset
  * @param {String} id Playlist ID
  * @param {String} access_token Spotify access token
  * @param {Function} successHandler Callback when all tracks are received
  * @param {Function} errorHandler Callback when some error occurs
  */
 function getPlaylistRecursive(items, offset, id, access_token, successHandler, errorHandler) {
-  axios.get('https://api.spotify.com/v1/playlists/'+id+'/tracks?offset=' + offset,
-    { headers: { 'Authorization': 'Bearer ' + access_token
-  }}).then(response => {
-    var stats = {limit:response.data.limit, offset:response.data.offset, total:response.data.total};
+  axios.get('https://api.spotify.com/v1/playlists/' + id + '/tracks?offset=' + offset,
+    {
+      headers: {
+        'Authorization': 'Bearer ' + access_token
+      }
+    }).then(response => {
+    const stats = {limit: response.data.limit, offset: response.data.offset, total: response.data.total};
     console.log('Received items: ' + JSON.stringify(stats));
 
     items = items.concat(response.data.items);
@@ -48,10 +51,10 @@ function getPlaylistRecursive(items, offset, id, access_token, successHandler, e
  * Randomize array in-place using Durstenfeld shuffle algorithm
  */
 function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
 }

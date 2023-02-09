@@ -1,22 +1,31 @@
-import React from 'react';
+import * as React from 'react';
 import './App.css';
-import Lobby from'./Lobby.js'
-import Host from'./host/Host.js'
-import LoginError from'./host/LoginError.js'
-import Voting from'./player/Voting.js'
-import getHashParams from'./logic/hash.js'
+import Lobby from './Lobby'
+import Host from './host/Host'
+import LoginError from './host/LoginError'
+import Voting from './player/Voting'
+import getHashParams from './logic/hash'
 
-export default class App extends React.Component {
+type IProps = {
+}
+
+type IState = {
+  name?: string;
+  roomcode?: string;
+  hash_parameters?: any
+  view: string; message: string
+}
+
+export default class App extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      hash: null,
       view: 'lobby',
-      message: '',
-    };
+      message: ''
+    }
   }
 
-  viewChangeEvent = (newView, message) => {
+  viewChangeEvent = (newView: string, message: string) => {
     if (message) {
       console.log(message);
       this.setState({view: newView, message: message});
@@ -36,7 +45,7 @@ export default class App extends React.Component {
     if ('access_token' in _hash) {
       // Set token
       this.setState({
-        hash: _hash
+        hash_parameters: _hash
       });
       this.setState({
         view: "host"
@@ -55,7 +64,7 @@ export default class App extends React.Component {
     const gameState = this.state.view;
 
     if (gameState === 'host') {
-      view = <Host viewChangeEvent={this.viewChangeEvent} hash={this.state.hash} />
+      view = <Host viewChangeEvent={this.viewChangeEvent} hash_parameters={this.state.hash_parameters} />
     } else if (gameState === 'lobby') {
       view = <Lobby votingViewChange={this.votingViewChange} />
     } else if (gameState === 'error') {
