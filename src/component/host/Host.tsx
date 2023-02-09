@@ -8,6 +8,7 @@ import socket from "../socket/socketConfig";
 import {PlayerData} from "./PlayerData";
 import {PlaylistItem} from "./Playlist";
 import {SpotiguessOptions} from "./Options";
+import getVotingOptions from "../api/votingOptions";
 
 type IProps = {
   viewChangeEvent: (newView: string, message: string) => void
@@ -28,6 +29,7 @@ type IState = {
   options: SpotiguessOptions
   // The currently active playlist with track info
   playlistItems: Array<PlaylistItem>
+  votingOptions: Map<string, string>
   //key name, values: {score:num, currentVote:str}
   players: Map<string, PlayerData>
 }
@@ -41,6 +43,7 @@ export default class Host extends React.Component<IProps, IState> {
       canContinue: true,
       roomcode: generateRoomCode(),
       playlistItems: [],
+      votingOptions: new Map(),
       players: new Map(),
       // Set default options
       options: {
@@ -62,14 +65,24 @@ export default class Host extends React.Component<IProps, IState> {
   }
 
   startGame = (playlist: Array<PlaylistItem>, options: SpotiguessOptions) => {
-    this.setState({
-      gamePhase: "running",
-      playlistItems: playlist,
-      options: options
-    });
+    getVotingOptions(
+      playlist,
+      this.props.hash_parameters.access_token,
+      (votingOptions) => {
+        this.setState({
+          gamePhase: "running",
+          votingOptions: votingOptions,
+          playlistItems: playlist,
+          options: options
+        });
+      },
+      () => {
+        this.props.viewChangeEvent('error', 'Failed to get player names')
+      }
+    )
   }
 
-  finishGame = (results, canContinue) => {
+  finishGame = (results: Map<string, PlayerData>, canContinue: boolean) => {
     this.setState({
       gamePhase: "finished",
       canContinue: canContinue,
@@ -107,6 +120,7 @@ export default class Host extends React.Component<IProps, IState> {
         finishGame={this.finishGame}
         players={this.state.players}
         options={this.state.options}
+        votingOptions={this.state.votingOptions}
         playlistItems={this.state.playlistItems}/>
     } else if (gamePhase === "finished") {
       gameView = <Score

@@ -13,7 +13,7 @@ type IState = {
   roomcode: string
   warning: boolean;
   info: string;
-  options: any;
+  votingOptions: Map<string, string>;
   selectedOption: string;
   voteTime: number;
 }
@@ -32,7 +32,7 @@ export default class Voting extends React.Component<IProps, IState> {
       roomcode: this.props.roomcode,
       info: "Wait until the host has started the game or the next round is started.",
       warning: false,
-      options: [],
+      votingOptions: new Map(),
       selectedOption: '',
       voteTime: new Date().getTime()
     }
@@ -47,38 +47,51 @@ export default class Voting extends React.Component<IProps, IState> {
     this.setState({
       selectedOption: '',
       voteTime: roundInfo.voteTime,
-      info: roundInfo.title + ' - ' + roundInfo.artist})
+      info: roundInfo.title + ' - ' + roundInfo.artist
+    })
   }
 
-  onOptionsReceived = (options) => {
-    this.setState({options: options})
+  onOptionsReceived = (options: Map<string, string>) => {
+    console.log(options)
+    this.setState({votingOptions: new Map(Object.entries(options))})
   }
 
   onOptionSelect = (e) => {
     if (new Date().getTime() < this.state.voteTime) {
       socket.emit('vote', {
-        name:this.state.name,
-        roomcode:this.state.roomcode,
-        option:e.target.value
+        name: this.state.name,
+        roomcode: this.state.roomcode,
+        option: e.target.value
       });
       this.setState({selectedOption: e.target.value})
     }
   }
 
+
   render() {
+    console.log(this.state.votingOptions)
     return (
       <div className="voting">
         <h1 className="cyan mb-3 block">Spotiguess</h1>
         <p className="text-white" id="waiting">{this.state.info}</p>
-        { this.state.options.map((option) => {
-          let btnClass = "sbtn mb-1 btn-block option"
-          return(
-            <button className={this.state.selectedOption === option ? btnClass + " sbtn-white" : btnClass + " sbtn-green"} key={option} value={option}
-              onClick={(value) => this.onOptionSelect(value)}>
-              {option}
-            </button>
-          );
-        })}
+        <>
+          {
+            Array.from(this.state.votingOptions,
+              ([playerID, playerName]) => ({playerID, playerName})
+            ).map((entry) => {
+              let btnClass = "sbtn mb-1 btn-block option"
+              return (
+                <button
+                  className={this.state.selectedOption === entry.playerID ? btnClass + " sbtn-white" : btnClass + " sbtn-green"}
+                  key={entry.playerID}
+                  value={entry.playerID}
+                  onClick={(value) => this.onOptionSelect(value)}>
+                  {entry.playerName}
+                </button>
+              );
+            })
+          }
+        </>
       </div>
     );
   }

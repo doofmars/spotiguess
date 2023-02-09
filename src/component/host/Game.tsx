@@ -2,11 +2,11 @@ import * as React from 'react';
 import Song from './Song';
 import JoinedPlayer from './JoinedPlayer'
 import {getNextTrack, hasNextTrack} from '../logic/nextSong'
-import getVotingOptions from '../logic/votingOptions'
 import socket from "../socket/socketConfig";
 import {PlaylistItem} from "./Playlist";
 import {PlayerData} from "./PlayerData";
 import {SpotiguessOptions} from "./Options";
+import mapToObject from "../logic/mapTool";
 
 const COUNTDOWN = 20;
 const PREVIEW_DURATION = 30
@@ -18,6 +18,8 @@ type IProps = {
   players: Map<string, PlayerData>
   // The currently active playlist with track info
   playlistItems: Array<PlaylistItem>
+  // The id and display name available for voting
+  votingOptions: Map<string, string>
   options: SpotiguessOptions
   // Callback for error handling
   viewChangeEvent: (newView: string, message: string) => void
@@ -33,7 +35,6 @@ type IState = {
   countdown: number
   showResult: boolean;
   audio: any
-  votingOptions: Array<string>
   voteTime: number
 }
 
@@ -59,7 +60,6 @@ export default class Game extends React.Component<IProps, IState> {
     this.state = {
       round: 0,
       players: this.props.players,
-      votingOptions: getVotingOptions(this.props.playlistItems),
       audio: new Audio(this.props.playlistItems[itemsId].track.preview_url),
       showResult: false,
       countdown: COUNTDOWN,
@@ -69,7 +69,7 @@ export default class Game extends React.Component<IProps, IState> {
 
   componentDidMount() {
     // Propagate round start to clients
-    socket.emit('options', {roomcode: this.props.roomcode, options: this.state.votingOptions})
+    socket.emit('options', {roomcode: this.props.roomcode, options: mapToObject(this.props.votingOptions)})
 
     this.timer = setInterval(() => {
       this.countVotes(this.props.playlistItems[this.state.round].added_by.id)
@@ -175,7 +175,7 @@ export default class Game extends React.Component<IProps, IState> {
     });
     socket.emit('options', {
       roomcode: this.props.roomcode,
-      options: this.state.votingOptions
+      options: mapToObject(this.props.votingOptions)
     });
   }
 
@@ -210,6 +210,7 @@ export default class Game extends React.Component<IProps, IState> {
       <div className="game container">
         <Song
           songData={this.props.playlistItems[this.state.round]}
+          addedBy={this.props.votingOptions.get(this.props.playlistItems[this.state.round].added_by.id)}
           showResult={this.state.showResult}
           updateShowResults={(show: boolean) => this.setState({showResult: show})}
           songVolume={this.props.options.volume}/>

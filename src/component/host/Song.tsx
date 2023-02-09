@@ -1,11 +1,11 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import './Song.css';
 import artistList from '../logic/artistList';
-import {Playlist, PlaylistItem} from "./Playlist";
+import {PlaylistItem} from "./Playlist";
 
 type IProps = {
   songData: PlaylistItem;
+  addedBy: string
   songVolume: number;
   showResult: boolean;
   updateShowResults: (show: boolean) => void;
@@ -71,7 +71,6 @@ export default class Song extends React.Component<IProps, IState> {
 
   render() {
     let track = this.props.songData.track;
-    let addedBy = this.props.songData.added_by.id;
     let showResult = this.props.showResult;
     let resultPanel;
     if (!showResult) {
@@ -83,7 +82,7 @@ export default class Song extends React.Component<IProps, IState> {
                     </div>
     } else {
       resultPanel = <button className="sbtn sbtn-white mb-1 btn-block" id="added-by" type="button">
-                      Added by <br/> {addedBy}
+                      Added by <br/> {this.props.addedBy}
                     </button>
     }
     return (
