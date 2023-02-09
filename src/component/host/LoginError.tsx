@@ -2,7 +2,7 @@ import * as React from 'react';
 import login from "../api/login";
 
 type IProps = {
-  viewChangeEvent: Function;
+  viewChangeEvent: (newView: string, message: string) => void;
   message: string;
 }
 

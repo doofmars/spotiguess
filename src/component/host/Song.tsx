@@ -8,7 +8,7 @@ type IProps = {
   songData: PlaylistItem;
   songVolume: number;
   showResult: boolean;
-  updateShowResults: Function;
+  updateShowResults: (show: boolean) => void;
 }
 
 type IState = {

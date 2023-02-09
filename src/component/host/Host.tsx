@@ -10,7 +10,7 @@ import {PlaylistItem} from "./Playlist";
 import {SpotiguessOptions} from "./Options";
 
 type IProps = {
-  viewChangeEvent: Function;
+  viewChangeEvent: (newView: string, message: string) => void
   hash_parameters: {
     // Code to join the room
     roomcode: string
@@ -53,7 +53,7 @@ export default class Host extends React.Component<IProps, IState> {
     }
   }
 
-  addPlayer = (player) => {
+  addPlayer = (player: string) => {
     let players = this.state.players
     players.set(player, {score: 0, currentVote:""})
     this.setState({

@@ -3,8 +3,8 @@ import './Score.css';
 import {PlayerData} from "./PlayerData";
 
 type IProps = {
-  viewChangeEvent: Function;
-  continue: Function;
+  viewChangeEvent: (newView: string, message: string) => void;
+  continue: () => void;
   canContinue: boolean;
   results: Map<string, PlayerData>;
 }

@@ -6,21 +6,21 @@ import getPlaylist from '../api/getPlaylist'
 import JoinedPlayer from './JoinedPlayer'
 import socket from "../socket/socketConfig";
 import Switch from "react-switch";
-import {PlaylistOverview, PlaylistOverviewItem} from "./Playlist";
+import {PlaylistItem, PlaylistOverview, PlaylistOverviewItem} from "./Playlist";
 import {PlayerData} from "./PlayerData";
 import {SpotiguessOptions} from "./Options";
 
 type IProps = {
   // Callback for error handling
-  viewChangeEvent: Function
+  viewChangeEvent: (newView: string, message: string) => void
   // Callback for game has started
-  startGame: Function
+  startGame: (playlist: Array<PlaylistItem>, options: SpotiguessOptions) => void
   // Used for spotify api access
   access_token: string
   // List of players
   players: Map<string, PlayerData>
   // Callback to add an incoming player
-  addPlayer: Function
+  addPlayer: (player: string) => void
   // The default options
   defaultOptions: SpotiguessOptions
 }
@@ -117,7 +117,7 @@ export default class CreateGame extends React.Component<IProps, IState> {
       title = "Configure game"
       view = <Config
         options={this.state.options}
-        setRounds={(rounds) => this.setState({
+        setRounds={(rounds: number) => this.setState({
           options: {
             rounds: rounds,
             showScore: this.state.options.showScore,
@@ -126,7 +126,7 @@ export default class CreateGame extends React.Component<IProps, IState> {
             missingPreviewSkip: this.state.options.missingPreviewSkip,
           }
         })}
-        setShowScore={(showScore) => this.setState({
+        setShowScore={(showScore: boolean) => this.setState({
           options: {
             rounds: this.state.options.rounds,
             showScore: showScore,
@@ -135,7 +135,7 @@ export default class CreateGame extends React.Component<IProps, IState> {
             missingPreviewSkip: this.state.options.missingPreviewSkip,
           }
         })}
-        setShowVotes={(showVotes) => this.setState({
+        setShowVotes={(showVotes: boolean) => this.setState({
           options: {
             rounds: this.state.options.rounds,
             showScore: this.state.options.showScore,
@@ -148,7 +148,7 @@ export default class CreateGame extends React.Component<IProps, IState> {
       title = "Select a collaborative playlist";
       view = <PlaylistTable
         playlistOverview={this.state.playlistOverview}
-        selectPlaylist={(playlistId) => this.setState({selectedPlaylistId: playlistId})}
+        selectPlaylist={(playlistId: string) => this.setState({selectedPlaylistId: playlistId})}
         selectedPlaylistId={this.state.selectedPlaylistId}/>
     }
 
@@ -207,10 +207,10 @@ type ConfigProps = {
     // skip songs without preview
     missingPreviewSkip: boolean
   }
-  setRounds: Function
+  setRounds: (rounds: number) => void
   // setVolume: Function
-  setShowVotes: Function
-  setShowScore: Function
+  setShowVotes: (showVotes: boolean) => void
+  setShowScore: (showScore: boolean) => void
   // setMissingPreviewSkip: Function
 }
 
@@ -222,7 +222,8 @@ class Config extends React.Component<ConfigProps> {
           <label className="col-sm-6 col-form-label text-right">Number of rounds</label>
           <div className="col-sm-6">
             <input type="number" className="form-control"
-                   value={this.props.options.rounds} onChange={(value) => this.props.setRounds(value)}/>
+                   value={this.props.options.rounds}
+                   onChange={(e) => this.props.setRounds(Number(e.currentTarget.value))}/>
           </div>
         </div>
         <div className="form-group row">
@@ -247,7 +248,7 @@ class Config extends React.Component<ConfigProps> {
 type PlaylistProps = {
   playlistOverview: PlaylistOverview
   selectedPlaylistId: string
-  selectPlaylist: Function
+  selectPlaylist: (playlistId: string) => void
 }
 
 class PlaylistTable extends React.Component<PlaylistProps> {
@@ -286,7 +287,7 @@ type PlaylistRowProps = {
   key: number
   selectedPlaylistId: string
   playlistOverview: PlaylistOverviewItem
-  selectPlaylist: Function
+  selectPlaylist: (playlistId: string) => void
 }
 
 class PlaylistRow extends React.Component<PlaylistRowProps> {

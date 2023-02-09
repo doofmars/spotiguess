@@ -25,7 +25,7 @@ export default class App extends React.Component<IProps, IState> {
     }
   }
 
-  viewChangeEvent = (newView, message) => {
+  viewChangeEvent = (newView: string, message: string) => {
     if (message) {
       console.log(message);
       this.setState({view: newView, message: message});

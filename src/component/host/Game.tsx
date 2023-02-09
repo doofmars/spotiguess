@@ -20,9 +20,9 @@ type IProps = {
   playlistItems: Array<PlaylistItem>
   options: SpotiguessOptions
   // Callback for error handling
-  viewChangeEvent: Function
+  viewChangeEvent: (newView: string, message: string) => void
   // Callback to mark game is finished
-  finishGame: Function
+  finishGame: (results: Map<string, PlayerData>, canContinue: boolean) => void
 }
 
 type IState = {
@@ -98,7 +98,7 @@ export default class Game extends React.Component<IProps, IState> {
     if (itemsId < 0) {
       // No more songs in playlist, finish game
       this.setState({round: round})
-      this.props.finishGame(false);
+      this.props.finishGame(this.state.players,false);
       return;
     }
     let date = new Date();
@@ -211,7 +211,7 @@ export default class Game extends React.Component<IProps, IState> {
         <Song
           songData={this.props.playlistItems[this.state.round]}
           showResult={this.state.showResult}
-          updateShowResults={(value) => this.setState({showResult: value})}
+          updateShowResults={(show: boolean) => this.setState({showResult: show})}
           songVolume={this.props.options.volume}/>
         <div className="container">
           <div className="row">
