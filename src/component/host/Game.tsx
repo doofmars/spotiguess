@@ -32,6 +32,7 @@ type IState = {
   players: Map<string, PlayerData>
   //Current round
   round: number
+  currentPlaylistItemId: number
   countdown: number
   showResult: boolean;
   audio: any
@@ -51,16 +52,17 @@ export default class Game extends React.Component<IProps, IState> {
       this.props.viewChangeEvent('error', 'The selected playlist has no suitable tracks to your configuration');
     }
     // Set pre initialize state since itemId is needed in nextTrack()
-    let itemsId = getNextTrack(
+    let firstPlaylistId = getNextTrack(
       this.props.playlistItems, 0, this.props.options.missingPreviewSkip);
-
+    console.log("firstRound");
     let date = new Date();
     date.setSeconds(date.getSeconds() + COUNTDOWN);
 
     this.state = {
       round: 0,
+      currentPlaylistItemId: firstPlaylistId,
       players: this.props.players,
-      audio: new Audio(this.props.playlistItems[itemsId].track.preview_url),
+      audio: new Audio(this.props.playlistItems[firstPlaylistId].track.preview_url),
       showResult: false,
       countdown: COUNTDOWN,
       voteTime:date.getTime()
@@ -70,9 +72,15 @@ export default class Game extends React.Component<IProps, IState> {
   componentDidMount() {
     // Propagate round start to clients
     socket.emit('options', {roomcode: this.props.roomcode, options: mapToObject(this.props.votingOptions)})
+    socket.emit('next-song', {
+      roomcode:this.props.roomcode,
+      title:this.props.playlistItems[this.state.currentPlaylistItemId].track.name,
+      artist:this.props.playlistItems[this.state.currentPlaylistItemId].track.artists[0].name,
+      voteTime:this.state.voteTime
+    });
 
     this.timer = setInterval(() => {
-      this.countVotes(this.props.playlistItems[this.state.round].added_by.id)
+      this.countVotes(this.props.playlistItems[this.state.currentPlaylistItemId].added_by.id)
       let newState = this.nextTrack();
       if (newState !== undefined) {
         this.setState(newState);
@@ -91,11 +99,11 @@ export default class Game extends React.Component<IProps, IState> {
       this.props.finishGame(this.state.players, true);
       return;
     }
-    let itemsId = getNextTrack(
+    let nextPlaylistId = getNextTrack(
       this.props.playlistItems,
-      this.state.round,
+      this.state.currentPlaylistItemId ,
       this.props.options.missingPreviewSkip);
-    if (itemsId < 0) {
+    if (nextPlaylistId < 0) {
       // No more songs in playlist, finish game
       this.setState({round: round})
       this.props.finishGame(this.state.players,false);
@@ -103,19 +111,19 @@ export default class Game extends React.Component<IProps, IState> {
     }
     let date = new Date();
     date.setSeconds(date.getSeconds() + COUNTDOWN);
-    let now = date.getTime();
     socket.emit('next-song', {
       roomcode:this.props.roomcode,
-      title:this.props.playlistItems[itemsId].track.name,
-      artist:this.props.playlistItems[itemsId].track.artists[0].name,
-      voteTime:now
+      title:this.props.playlistItems[nextPlaylistId].track.name,
+      artist:this.props.playlistItems[nextPlaylistId].track.artists[0].name,
+      voteTime:date.getTime()
     });
     return {
       round: round,
+      currentPlaylistItemId: nextPlaylistId,
       showResult: false,
       countdown: COUNTDOWN,
-      audio: new Audio(this.props.playlistItems[itemsId].track.preview_url),
-      voteTime:now
+      audio: new Audio(this.props.playlistItems[nextPlaylistId].track.preview_url),
+      voteTime:date.getTime()
     };
   }
 
@@ -169,8 +177,8 @@ export default class Game extends React.Component<IProps, IState> {
     }
     socket.emit('next-song', {
       roomcode:this.props.roomcode,
-      title:this.props.playlistItems[this.state.round].track.name,
-      artist:this.props.playlistItems[this.state.round].track.artists[0].name,
+      title:this.props.playlistItems[this.state.currentPlaylistItemId].track.name,
+      artist:this.props.playlistItems[this.state.currentPlaylistItemId].track.artists[0].name,
       voteTime:this.state.voteTime
     });
     socket.emit('options', {
@@ -198,7 +206,7 @@ export default class Game extends React.Component<IProps, IState> {
     const joinedPlayer = [];
     this.state.players.forEach((value, key) => {
       let hasVoted = (value.currentVote !== "" && value.currentVote !== undefined);
-      let isCorrect = hasVoted && this.props.playlistItems[this.state.round].added_by.id === value.currentVote;
+      let isCorrect = hasVoted && this.props.playlistItems[this.state.currentPlaylistItemId].added_by.id === value.currentVote;
       joinedPlayer.push(<JoinedPlayer
         player={true} name={key} key={key} score={value.score}
         isCorrect={isCorrect} hasVoted={hasVoted} showResult={this.state.showResult}
@@ -209,8 +217,8 @@ export default class Game extends React.Component<IProps, IState> {
     return (
       <div className="game container">
         <Song
-          songData={this.props.playlistItems[this.state.round]}
-          addedBy={this.props.votingOptions.get(this.props.playlistItems[this.state.round].added_by.id)}
+          songData={this.props.playlistItems[this.state.currentPlaylistItemId]}
+          addedBy={this.props.votingOptions.get(this.props.playlistItems[this.state.currentPlaylistItemId].added_by.id)}
           showResult={this.state.showResult}
           updateShowResults={(show: boolean) => this.setState({showResult: show})}
           songVolume={this.props.options.volume}/>
