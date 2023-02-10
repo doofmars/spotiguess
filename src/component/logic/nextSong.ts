@@ -7,11 +7,12 @@
  * @returns The index of the next track or -1 if no suitable tracks are available
  */
 function getNextTrack(playlist, currentId, missingPreviewSkip) {
+  currentId += 1
   if (currentId >= playlist.length) {
     return -1;
   }
   if (missingPreviewSkip && playlist[currentId].track.preview_url === null) {
-    return getNextTrack(playlist, currentId + 1, missingPreviewSkip);
+    return getNextTrack(playlist, currentId, missingPreviewSkip);
   } else {
     return currentId;
   }
