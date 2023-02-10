@@ -93,7 +93,7 @@ export default class Game extends React.Component<IProps, IState> {
   nextTrack = () => {
     console.log("nextRound");
     let round = this.state.round + 1
-    if (this.state.round > this.props.options.rounds) {
+    if (round >= this.props.options.rounds) {
       // Last round was played, finish game
       this.setState({round: round})
       this.props.finishGame(this.state.players, true);
