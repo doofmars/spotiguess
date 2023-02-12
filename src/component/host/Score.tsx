@@ -24,7 +24,7 @@ export default class Score extends React.Component<IProps> {
 
     let continueBtn
     if (this.props.canContinue) {
-      continueBtn = <button className="sbtn sbtn-white mb-1 float-right" onClick={() => this.props.continue}>Continue Playing</button>
+      continueBtn = <button className="sbtn sbtn-white mb-1 float-right" onClick={this.props.continue}>Continue Playing</button>
     }
 
     return (

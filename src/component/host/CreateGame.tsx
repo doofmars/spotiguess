@@ -229,14 +229,14 @@ class Config extends React.Component<ConfigProps> {
         <div className="form-group row">
           <label className="col-sm-6 col-form-label text-right">Show who has voted</label>
           <div className="col-sm-6">
-            <Switch onChange={() => this.props.setShowVotes} checked={this.props.options.showVotes}
+            <Switch onChange={(checked) => this.props.setShowVotes(checked)} checked={this.props.options.showVotes}
                     uncheckedIcon={false} checkedIcon={false}/>
           </div>
         </div>
         <div className="form-group row">
           <label className="col-sm-6 col-form-label text-right">Show score while playing</label>
           <div className="col-sm-6">
-            <Switch onChange={() => this.props.setShowScore} checked={this.props.options.showScore}
+            <Switch onChange={(checked) => this.props.setShowScore(checked)} checked={this.props.options.showScore}
                     uncheckedIcon={false} checkedIcon={false}/>
           </div>
         </div>
