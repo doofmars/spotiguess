@@ -20,11 +20,15 @@ type IProps = {
   playlistItems: Array<PlaylistItem>
   // The id and display name available for voting
   votingOptions: Map<string, string>
+  // Round to start the game from
+  startingRound: number
+  // PlaylistItemId to start from, 0 for new games and increased if the game is continued
+  startingPlaylistItemId: number
   options: SpotiguessOptions
   // Callback for error handling
   viewChangeEvent: (newView: string, message: string) => void
   // Callback to mark game is finished
-  finishGame: (results: Map<string, PlayerData>, canContinue: boolean) => void
+  finishGame: (results: Map<string, PlayerData>, canContinue: boolean, round: number, currentPlaylistItemId: number) => void
 }
 
 type IState = {
@@ -53,13 +57,13 @@ export default class Game extends React.Component<IProps, IState> {
     }
     // Set pre initialize state since itemId is needed in nextTrack()
     let firstPlaylistId = getNextTrack(
-      this.props.playlistItems, 0, this.props.options.missingPreviewSkip);
+      this.props.playlistItems, this.props.startingPlaylistItemId, this.props.options.missingPreviewSkip);
     console.log("firstRound");
     let date = new Date();
     date.setSeconds(date.getSeconds() + COUNTDOWN);
 
     this.state = {
-      round: 0,
+      round: this.props.startingRound,
       currentPlaylistItemId: firstPlaylistId,
       players: this.props.players,
       audio: new Audio(this.props.playlistItems[firstPlaylistId].track.preview_url),
@@ -96,7 +100,7 @@ export default class Game extends React.Component<IProps, IState> {
     if (round >= this.props.options.rounds) {
       // Last round was played, finish game
       this.setState({round: round})
-      this.props.finishGame(this.state.players, true);
+      this.props.finishGame(this.state.players, true, round, this.state.currentPlaylistItemId);
       return;
     }
     let nextPlaylistId = getNextTrack(
@@ -106,7 +110,7 @@ export default class Game extends React.Component<IProps, IState> {
     if (nextPlaylistId < 0) {
       // No more songs in playlist, finish game
       this.setState({round: round})
-      this.props.finishGame(this.state.players,false);
+      this.props.finishGame(this.state.players,false, round, this.state.currentPlaylistItemId);
       return;
     }
     let date = new Date();

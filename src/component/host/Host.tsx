@@ -10,6 +10,8 @@ import {PlaylistItem} from "./Playlist";
 import {SpotiguessOptions} from "./Options";
 import getVotingOptions from "../api/votingOptions";
 
+const DEFAULT_NUMBER_OF_ROUNDS: number = 30;
+
 type IProps = {
   viewChangeEvent: (newView: string, message: string) => void
   hash_parameters: {
@@ -29,6 +31,10 @@ type IState = {
   options: SpotiguessOptions
   // The currently active playlist with track info
   playlistItems: Array<PlaylistItem>
+  // Round to start the game from
+  startingRound: number
+  // PlaylistItemId to start from, 0 for new games and increased if the game is continued
+  startingPlaylistItemId: number
   votingOptions: Map<string, string>
   //key name, values: {score:num, currentVote:str}
   players: Map<string, PlayerData>
@@ -45,9 +51,11 @@ export default class Host extends React.Component<IProps, IState> {
       playlistItems: [],
       votingOptions: new Map(),
       players: new Map(),
+      startingRound: 0,
+      startingPlaylistItemId: 0,
       // Set default options
       options: {
-        rounds: 30,
+        rounds: DEFAULT_NUMBER_OF_ROUNDS,
         volume: 0.2,
         showVotes: false,
         showScore: false,
@@ -82,17 +90,19 @@ export default class Host extends React.Component<IProps, IState> {
     )
   }
 
-  finishGame = (results: Map<string, PlayerData>, canContinue: boolean) => {
+  finishGame = (results: Map<string, PlayerData>, canContinue: boolean, currentRound: number, playlistItemId: number) => {
     this.setState({
       gamePhase: "finished",
       canContinue: canContinue,
-      players: results
+      players: results,
+      startingRound: currentRound,
+      startingPlaylistItemId: playlistItemId
     });
   }
 
   continue = () => {
     let options = this.state.options
-    options.rounds = options.rounds + 30
+    options.rounds = options.rounds + DEFAULT_NUMBER_OF_ROUNDS
     this.setState({
       gamePhase: "running",
       options: options
@@ -121,7 +131,9 @@ export default class Host extends React.Component<IProps, IState> {
         players={this.state.players}
         options={this.state.options}
         votingOptions={this.state.votingOptions}
-        playlistItems={this.state.playlistItems}/>
+        playlistItems={this.state.playlistItems}
+        startingPlaylistItemId={this.state.startingPlaylistItemId}
+        startingRound={this.state.startingRound}/>
     } else if (gamePhase === "finished") {
       gameView = <Score
         viewChangeEvent={this.props.viewChangeEvent}
