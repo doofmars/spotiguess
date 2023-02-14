@@ -1,0 +1,15 @@
+# Project folders
+node_modules
+npm-debug.log
+build
+.idea
+.vscode
+
+# Docker stuff
+.dockerignore
+Dockerfile
+
+# Configuration
+.editorconfig
+.env
+.nvmrc
