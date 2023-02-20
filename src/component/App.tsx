@@ -73,10 +73,6 @@ export default class App extends React.Component<IProps, IState> {
       view = <Voting name={this.state.name} roomcode={this.state.roomcode} />
     }
 
-    return (
-      <div>
-        {view}
-      </div>
-    );
+    return view;
   }
 }

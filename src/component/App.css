@@ -57,3 +57,15 @@
   background-color: #ff3424;
   color: #fff;
 }
+
+a {
+  color: #2de26d;
+}
+
+a:hover {
+  color: #1bc156;
+}
+
+a:visited {
+  color: #2de26d;
+}

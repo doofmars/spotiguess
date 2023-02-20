@@ -4,13 +4,6 @@
   margin: auto;
 }
 
-.content-start {
-  width: 100%;
-  max-width: 400px;
-  padding: 15px;
-  margin: auto;
-}
-
 h1 {
   font-size: 4rem;
 }
@@ -34,4 +27,23 @@ h1 {
 
 .bg-black {
   background-color: #000;
+}
+
+.lobby-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* set height to fill the viewport or a desired height */
+}
+
+.lobby {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  margin: auto;
+  flex-grow: 1;
+}
+
+.about {
+  padding-bottom: 20px;
 }
