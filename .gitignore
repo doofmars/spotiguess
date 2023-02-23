@@ -55,3 +55,6 @@ package-lock.json
 
 # Idea
 .idea
+
+# Git meta information
+/src/generatedBuildInfo.json

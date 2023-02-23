@@ -1,0 +1,49 @@
+.content {
+  width: 100%;
+  max-width: 650px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+/* The colors */
+.cyan {
+  color: #cdf658;
+}
+
+.olive {
+  color: #48917d;
+}
+
+.white {
+  color: #ffffff;
+}
+
+.magenta {
+  color: #f22fa5;
+}
+
+.bg-black {
+  background-color: #000;
+}
+
+.lobby-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* set height to fill the viewport or a desired height */
+}
+
+.lobby {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  margin: auto;
+  flex-grow: 1;
+}
+
+.about {
+  padding-bottom: 20px;
+}

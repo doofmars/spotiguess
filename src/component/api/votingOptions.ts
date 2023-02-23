@@ -1,4 +1,4 @@
-import {PlaylistItem} from "../host/Playlist";
+import {PlaylistItem} from "../host/models/Playlist";
 import axios from "axios";
 
 /**

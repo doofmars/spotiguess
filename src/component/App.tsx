@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './App.css';
-import Lobby from './Lobby'
+import Lobby from './lobby/Lobby'
 import Host from './host/Host'
-import LoginError from './host/LoginError'
+import LoginError from './LoginError'
 import Voting from './player/Voting'
 import getHashParams from './logic/hash'
 
@@ -73,10 +73,6 @@ export default class App extends React.Component<IProps, IState> {
       view = <Voting name={this.state.name} roomcode={this.state.roomcode} />
     }
 
-    return (
-      <div>
-        {view}
-      </div>
-    );
+    return view;
   }
 }

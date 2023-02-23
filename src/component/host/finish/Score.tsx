@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './Score.css';
-import {PlayerData} from "./PlayerData";
+import {PlayerData} from "../models/PlayerData";
 
 type IProps = {
   viewChangeEvent: (newView: string, message: string) => void;
