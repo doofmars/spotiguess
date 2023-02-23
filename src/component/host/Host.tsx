@@ -1,13 +1,13 @@
 import * as React from 'react';
 import './Host.css';
 import CreateGame from './create/CreateGame'
-import Game from './Game'
-import Score from './Score'
+import Game from './play/Game'
+import Score from './finish/Score'
 import generateRoomCode from '../logic/roomCode'
 import socket from "../socket/socketConfig";
-import {PlayerData} from "./PlayerData";
-import {PlaylistItem} from "./Playlist";
-import {SpotiguessOptions} from "./Options";
+import {PlayerData} from "./models/PlayerData";
+import {PlaylistItem} from "./models/Playlist";
+import {SpotiguessOptions} from "./models/Options";
 import getVotingOptions from "../api/votingOptions";
 
 const DEFAULT_NUMBER_OF_ROUNDS: number = 30;

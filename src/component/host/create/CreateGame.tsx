@@ -1,14 +1,14 @@
 import * as React from 'react';
 import './CreateGame.css';
 import axios from 'axios';
-import Image from 'react-bootstrap/Image'
 import getPlaylist from '../../api/getPlaylist'
-import JoinedPlayer from '../JoinedPlayer'
+import JoinedPlayer from '../player/JoinedPlayer'
 import socket from "../../socket/socketConfig";
-import Switch from "react-switch";
-import {PlaylistItem, PlaylistOverview, PlaylistOverviewItem} from "../Playlist";
-import {PlayerData} from "../PlayerData";
-import {SpotiguessOptions} from "../Options";
+import {PlaylistItem, PlaylistOverview} from "../models/Playlist";
+import {PlayerData} from "../models/PlayerData";
+import {SpotiguessOptions} from "../models/Options";
+import Config from "./Config";
+import PlaylistTable from "./PlaylistTable";
 
 type IProps = {
   // Callback for error handling
@@ -191,124 +191,5 @@ export default class CreateGame extends React.Component<IProps, IState> {
         </div>
       </div>
     );
-  }
-}
-
-type ConfigProps = {
-  options: {
-    // Number of rounds to play
-    rounds: number
-    // sound volume
-    volume: number
-    // instantly show if a player has voted
-    showVotes: boolean
-    // show score while playing
-    showScore: boolean
-    // skip songs without preview
-    missingPreviewSkip: boolean
-  }
-  setRounds: (rounds: number) => void
-  // setVolume: Function
-  setShowVotes: (showVotes: boolean) => void
-  setShowScore: (showScore: boolean) => void
-  // setMissingPreviewSkip: Function
-}
-
-class Config extends React.Component<ConfigProps> {
-  render() {
-    return (
-      <form className="config">
-        <div className="form-group row">
-          <label className="col-sm-6 col-form-label text-right">Number of rounds</label>
-          <div className="col-sm-6">
-            <input type="number" className="form-control"
-                   value={this.props.options.rounds}
-                   onChange={(e) => this.props.setRounds(Number(e.currentTarget.value))}/>
-          </div>
-        </div>
-        <div className="form-group row">
-          <label className="col-sm-6 col-form-label text-right">Show who has voted</label>
-          <div className="col-sm-6">
-            <Switch onChange={(checked) => this.props.setShowVotes(checked)} checked={this.props.options.showVotes}
-                    uncheckedIcon={false} checkedIcon={false}/>
-          </div>
-        </div>
-        <div className="form-group row">
-          <label className="col-sm-6 col-form-label text-right">Show score while playing</label>
-          <div className="col-sm-6">
-            <Switch onChange={(checked) => this.props.setShowScore(checked)} checked={this.props.options.showScore}
-                    uncheckedIcon={false} checkedIcon={false}/>
-          </div>
-        </div>
-      </form>
-    );
-  }
-}
-
-type PlaylistProps = {
-  playlistOverview: PlaylistOverview
-  selectedPlaylistId: string
-  selectPlaylist: (playlistId: string) => void
-}
-
-class PlaylistTable extends React.Component<PlaylistProps> {
-  render() {
-    return (
-      <table className="table table-dark">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Image</th>
-          <th scope="col">Name</th>
-          <th scope="col">Owner</th>
-          <th scope="col">Tracks</th>
-          <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody id="playlists">
-        {this.props.playlistOverview.items.map((playlist, index) => {
-          return (
-            <PlaylistRow
-              playlistOverview={playlist}
-              selectedPlaylistId={this.props.selectedPlaylistId}
-              selectPlaylist={this.props.selectPlaylist}
-              index={index} key={index}/>
-          );
-        })}
-        </tbody>
-      </table>
-    );
-  }
-}
-
-
-type PlaylistRowProps = {
-  index: number
-  key: number
-  selectedPlaylistId: string
-  playlistOverview: PlaylistOverviewItem
-  selectPlaylist: (playlistId: string) => void
-}
-
-class PlaylistRow extends React.Component<PlaylistRowProps> {
-  render() {
-    return (
-      <tr id={this.props.index.toString()}
-          className={this.props.selectedPlaylistId === this.props.playlistOverview.id ? 'selected' : null}>
-        <th scope="row">{this.props.index + 1}</th>
-        <td><Image width="150" height="150" thumbnail src={this.props.playlistOverview.images[0].url}/></td>
-        <td>{this.props.playlistOverview.name}</td>
-        <td>{this.props.playlistOverview.owner.display_name}</td>
-        <td>{this.props.playlistOverview.tracks.total}</td>
-        <td>
-          <button className="sbtn sbtn-green" id={this.props.playlistOverview.id} value={this.props.index} type="button"
-                  onClick={() => {
-                    this.props.selectPlaylist(this.props.playlistOverview.id)
-                  }}>
-            Select
-          </button>
-        </td>
-      </tr>
-    )
   }
 }

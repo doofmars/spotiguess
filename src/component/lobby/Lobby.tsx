@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './Lobby.css';
 import * as PropTypes from 'prop-types';
-import login from "./api/login";
+import login from "../api/login";
 import LoginInfo from "./LoginInfo";
 import {About} from "./About";
 
