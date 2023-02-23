@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Song from './Song';
-import JoinedPlayer from './JoinedPlayer'
-import {getNextTrack, hasNextTrack} from '../logic/nextSong'
-import socket from "../socket/socketConfig";
-import {PlaylistItem} from "./Playlist";
-import {PlayerData} from "./PlayerData";
-import {SpotiguessOptions} from "./Options";
-import mapToObject from "../logic/mapTool";
+import JoinedPlayer from '../player/JoinedPlayer'
+import {getNextTrack, hasNextTrack} from '../../logic/nextSong'
+import socket from "../../socket/socketConfig";
+import {PlaylistItem} from "../models/Playlist";
+import {PlayerData} from "../models/PlayerData";
+import {SpotiguessOptions} from "../models/Options";
+import mapToObject from "../../logic/mapTool";
 
 const COUNTDOWN = 20;
 const PREVIEW_DURATION = 30

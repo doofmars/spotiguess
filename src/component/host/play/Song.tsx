@@ -1,7 +1,7 @@
 import * as React from 'react';
-import './Song.css';
-import artistList from '../logic/artistList';
-import {PlaylistItem} from "./Playlist";
+import '../finish/Song.css';
+import artistList from '../../logic/artistList';
+import {PlaylistItem} from "../models/Playlist";
 
 type IProps = {
   songData: PlaylistItem;

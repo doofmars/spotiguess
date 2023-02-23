@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './App.css';
-import Lobby from './Lobby'
+import Lobby from './lobby/Lobby'
 import Host from './host/Host'
-import LoginError from './host/LoginError'
+import LoginError from './LoginError'
 import Voting from './player/Voting'
 import getHashParams from './logic/hash'
 

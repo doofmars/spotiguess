@@ -1,6 +1,6 @@
 import * as React from "react";
 import './About.css';
-import generatedBuildInfo from '../generatedBuildInfo.json';
+import generatedBuildInfo from '../../generatedBuildInfo.json';
 
 export const About = () => {
   return (

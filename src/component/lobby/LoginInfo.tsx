@@ -3,7 +3,7 @@ import './LoginInfo.css';
 import * as PropTypes from 'prop-types';
 import 'react-slidedown/lib/slidedown.css'
 import {SlideDown} from 'react-slidedown'
-import joinGame from "./socket/joinGame";
+import joinGame from "../socket/joinGame";
 import {CSSProperties} from "react";
 
 type IProps = {
