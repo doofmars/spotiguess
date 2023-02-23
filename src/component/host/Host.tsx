@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './Host.css';
-import CreateGame from './CreateGame'
+import CreateGame from './create/CreateGame'
 import Game from './Game'
 import Score from './Score'
 import generateRoomCode from '../logic/roomCode'

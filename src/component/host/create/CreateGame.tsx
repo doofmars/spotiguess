@@ -2,13 +2,13 @@ import * as React from 'react';
 import './CreateGame.css';
 import axios from 'axios';
 import Image from 'react-bootstrap/Image'
-import getPlaylist from '../api/getPlaylist'
-import JoinedPlayer from './JoinedPlayer'
-import socket from "../socket/socketConfig";
+import getPlaylist from '../../api/getPlaylist'
+import JoinedPlayer from '../JoinedPlayer'
+import socket from "../../socket/socketConfig";
 import Switch from "react-switch";
-import {PlaylistItem, PlaylistOverview, PlaylistOverviewItem} from "./Playlist";
-import {PlayerData} from "./PlayerData";
-import {SpotiguessOptions} from "./Options";
+import {PlaylistItem, PlaylistOverview, PlaylistOverviewItem} from "../Playlist";
+import {PlayerData} from "../PlayerData";
+import {SpotiguessOptions} from "../Options";
 
 type IProps = {
   // Callback for error handling
