@@ -5,6 +5,7 @@ import Host from './host/Host'
 import LoginError from './LoginError'
 import Voting from './player/Voting'
 import getHashParams from './logic/hash'
+import joinGame from "./socket/joinGame";
 
 type IProps = {
 }
@@ -35,19 +36,23 @@ export default class App extends React.Component<IProps, IState> {
   }
 
   votingViewChange = (name, roomcode) => {
-    this.setState({view: "vote", name: name, roomcode: roomcode});
+    if (this.state.view !== 'host') {
+      localStorage.setItem('spotiguess-name', name)
+      localStorage.setItem('spotiguess-roomcode', roomcode)
+      this.setState({view: "vote", name: name, roomcode: roomcode})
+    }
   }
 
   componentDidMount() {
     // Set token
     let _hash = getHashParams();
-
+    let name = localStorage.getItem('spotiguess-name')
+    let roomcode = localStorage.getItem('spotiguess-roomcode')
     if ('access_token' in _hash) {
+      localStorage.clear()
       // Set token
       this.setState({
-        hash_parameters: _hash
-      });
-      this.setState({
+        hash_parameters: _hash,
         view: "host"
       });
     }
@@ -55,6 +60,9 @@ export default class App extends React.Component<IProps, IState> {
       this.setState({
         view: "error"
       });
+    } else if (name !== null && roomcode !== null) {
+      this.setState({name: name, roomcode: roomcode})
+      joinGame(name, roomcode, this.votingViewChange)
     }
   }
 

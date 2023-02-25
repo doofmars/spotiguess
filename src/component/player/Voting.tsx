@@ -52,7 +52,6 @@ export default class Voting extends React.Component<IProps, IState> {
   }
 
   onOptionsReceived = (options: Map<string, string>) => {
-    console.log(options)
     this.setState({votingOptions: new Map(Object.entries(options))})
   }
 
@@ -69,7 +68,6 @@ export default class Voting extends React.Component<IProps, IState> {
 
 
   render() {
-    console.log(this.state.votingOptions)
     return (
       <div className="voting">
         <h1 className="cyan mb-3 block">Spotiguess</h1>
