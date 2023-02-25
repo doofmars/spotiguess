@@ -44,11 +44,14 @@ export default class Voting extends React.Component<IProps, IState> {
   }
 
   onRoundStarted = (roundInfo) => {
-    this.setState({
-      selectedOption: '',
-      voteTime: roundInfo.voteTime,
-      info: roundInfo.title + ' - ' + roundInfo.artist
-    })
+    let info = roundInfo.title + ' - ' + roundInfo.artist;
+    if (this.state.info !== info && this.state.voteTime !== roundInfo.voteTime) {
+      this.setState({
+        selectedOption: '',
+        voteTime: roundInfo.voteTime,
+        info: info
+      })
+    }
   }
 
   onOptionsReceived = (options: Map<string, string>) => {
