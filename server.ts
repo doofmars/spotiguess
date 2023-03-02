@@ -1,7 +1,7 @@
-var express = require('express');
-var fs = require("fs");
-var app = express();
-var http = require('http').createServer(app);
+const express = require('express');
+const fs = require("fs");
+const app = express();
+const http = require('http').createServer(app);
 let config = {}
 
 if (fs.existsSync('.env')) {
@@ -14,14 +14,14 @@ if (fs.existsSync('.env')) {
   console.log("Development mode")
 }
 
-var io = require('socket.io')(http, config);
+const io = require('socket.io')(http, config);
 const port = process.env.PORT || 8080;
 
 app.use('/',
-        express.static(__dirname + '/build'));
+  express.static(__dirname + '/build'));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/build/' + 'index.html');
+  res.sendFile(__dirname + '/build/index.html');
 });
 
 io.on('connection', function(socket){

@@ -22,7 +22,7 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.ts",
     "git-info": "node src/component/logic/gitInfo.tsx",
     "develop": "npm run git-info && react-scripts start",
     "build": "npm run git-info && react-scripts build",

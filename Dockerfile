@@ -20,7 +20,7 @@ FROM node:19-alpine
 WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/build /usr/src/app/build
-COPY --from=builder /usr/src/app/server.js /usr/src/app/server.js
+COPY --from=builder /usr/src/app/server.ts /usr/src/app/server.ts
 
 RUN npm install express \
     && npm install socket.io
@@ -29,4 +29,4 @@ RUN npm install express \
 EXPOSE 8080
 
 # Serve the app
-CMD ["node", "server.js"]
+CMD ["node", "server.ts"]
