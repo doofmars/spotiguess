@@ -1,7 +1,20 @@
 var express = require('express');
+var fs = require("fs");
 var app = express();
 var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+let config = {}
+
+if (fs.existsSync('.env')) {
+  config = {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"]
+    }
+  }
+  console.log("Development mode")
+}
+
+var io = require('socket.io')(http, config);
 const port = process.env.PORT || 8080;
 
 app.use('/',
@@ -63,7 +76,6 @@ io.on('connection', function(socket){
     console.log('next-song: ' + JSON.stringify(msg));
     socket.to(msg.roomcode).emit('next-song', msg);
   });
-
 
   socket.on('disconnect', function(){
     console.log('disconnected');
