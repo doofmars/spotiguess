@@ -39,20 +39,32 @@ export default class Voting extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    socket.on('options', this.onOptionsReceived);
+    socket.on('options', this.onOptionsReceived)
     socket.on('next-song', this.onRoundStarted)
   }
 
   onRoundStarted = (roundInfo) => {
-    this.setState({
-      selectedOption: '',
-      voteTime: roundInfo.voteTime,
-      info: roundInfo.title + ' - ' + roundInfo.artist
-    })
+    let info = roundInfo.title + ' - ' + roundInfo.artist;
+    if (this.state.info !== info && this.state.voteTime !== roundInfo.voteTime) {
+      // Check local storage for selected option
+      let selectedOption = ''
+      const localInfo = localStorage.getItem('spotiguess-info');
+      if (info === localInfo) {
+        selectedOption = localStorage.getItem('spotiguess-selectedOption');
+      } else {
+        localStorage.removeItem('spotiguess-info')
+        localStorage.removeItem('spotiguess-selectedOption')
+      }
+      // Upate song info
+      this.setState({
+        selectedOption: selectedOption,
+        voteTime: roundInfo.voteTime,
+        info: info
+      })
+    }
   }
 
   onOptionsReceived = (options: Map<string, string>) => {
-    console.log(options)
     this.setState({votingOptions: new Map(Object.entries(options))})
   }
 
@@ -63,13 +75,15 @@ export default class Voting extends React.Component<IProps, IState> {
         roomcode: this.state.roomcode,
         option: e.target.value
       });
+      // Store selected option for vote into local storage
+      localStorage.setItem('spotiguess-selectedOption', e.target.value)
+      localStorage.setItem('spotiguess-info', this.state.info)
       this.setState({selectedOption: e.target.value})
     }
   }
 
 
   render() {
-    console.log(this.state.votingOptions)
     return (
       <div className="voting">
         <h1 className="cyan mb-3 block">Spotiguess</h1>
