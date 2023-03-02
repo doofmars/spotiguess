@@ -39,7 +39,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # Setup:
 
 The frontend is developed with react the backend uses socket io for client to client communication.
-Run server.js for nodejs server + express for frontend delivery
+Run server.ts for nodejs server + express for frontend delivery
 `node server`
 The server will listen on port 3000
 If frontend has been build `yarn build` the server uses the express framework to deliver the app build for production.
@@ -80,4 +80,16 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
+## Run using Docker
 
+To build this project as docker container run the following command
+
+```bash
+docker build -t local/spotiguess:latest .
+```
+
+To run the image on port 80 use the following command:
+
+```bash
+docker run -d -p 80:8080 --name spotiguess local/spotiguess:latest
+```
