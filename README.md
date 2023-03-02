@@ -80,4 +80,16 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
+## Run using Docker
 
+To build this project as docker container run the following command
+
+```bash
+docker build -t local/spotiguess:latest .
+```
+
+To run the image on port 80 use the following command:
+
+```bash
+docker run -d -p 80:8080 --name spotiguess local/spotiguess:latest
+```
