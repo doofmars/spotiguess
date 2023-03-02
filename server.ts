@@ -1,14 +1,27 @@
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+const express = require('express');
+const fs = require("fs");
+const app = express();
+const http = require('http').createServer(app);
+let config = {}
+
+if (fs.existsSync('.env')) {
+  config = {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"]
+    }
+  }
+  console.log("Development mode")
+}
+
+const io = require('socket.io')(http, config);
 const port = process.env.PORT || 8080;
 
 app.use('/',
-        express.static(__dirname + '/build'));
+  express.static(__dirname + '/build'));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/build/' + 'index.html');
+  res.sendFile(__dirname + '/build/index.html');
 });
 
 io.on('connection', function(socket){
@@ -63,7 +76,6 @@ io.on('connection', function(socket){
     console.log('next-song: ' + JSON.stringify(msg));
     socket.to(msg.roomcode).emit('next-song', msg);
   });
-
 
   socket.on('disconnect', function(){
     console.log('disconnected');
