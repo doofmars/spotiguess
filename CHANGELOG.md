@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.4.0
+
+- Add local storage to remember current room and name for fast rejoin on connection lost
+- Add local storage for last voting to keep the vote intact
+- Improve deployment setup
+- Fix open vulnerabilities
+
 ## Version 0.3.0
 
 - Add about section
