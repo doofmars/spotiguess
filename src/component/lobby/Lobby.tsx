@@ -48,7 +48,7 @@ export default class Lobby extends React.Component<IProps, IState> {
               Create new game
             </button>
             <p className="text-white mb-4">
-              Login using your spoitify account,
+              Login using your Spotify account,
               to access your playlists
             </p>
             <button className="sbtn sbtn-white mb-1 btn-block" id="join-init" type="button"
